@@ -1,4 +1,4 @@
-import { IllustAPI } from "@/backend/sql/search/images";
+import { IllustMetaAPI } from "@/backend/sql/meta/images";
 import {
   checkHTTPRequests,
   makeError,
@@ -19,18 +19,13 @@ export default async function handler(
       .status(403)
       .json({ error: true, errorMessage: requestErrorMessage, body: [] });
   }
-  const i = await new IllustAPI().connect();
+  const i = await new IllustMetaAPI().connect();
 
   let tags = (req.query.tags as string) || null;
   if (tags === "_") tags = null;
   let nouns = (req.query.nouns as string) || null;
   if (nouns === "_") nouns = null;
-
-  const limit = Number(req.query.limit as string) || 18;
-  const offset = Number(req.query.offset as string) || 0;
   const authorId = (req.query.authorId as string) || null || null;
-  const seed = (req.query.seed as string) || "";
-  const sort = (req.query.sort as string) || "created_at,desc";
   const aiMode = Number(req.query.aiMode as string) || 2;
   const hparam = ((req.query.hparams as string) || "0,100").split(",") || [
     "0",
@@ -68,18 +63,15 @@ export default async function handler(
     i.setNouns(nouns.split(","));
   }
 
-  i.setOffset(offset);
-  i.setLimit(limit);
   i.setAuthorId(authorId);
   i.setSinceDate(sinceDate);
   i.setUntilDate(untilDate);
   i.setHParams(min, max);
-  i.setSort(sort, seed);
   i.setAiMode(aiMode);
 
   const response = await i.execMethod();
   if (response) {
-    return res.status(200).json(makeSuccess(response));
+    return res.status(200).json(makeSuccess(response[0].sum));
   } else {
     return res.status(500).json(makeError("REPONSE DATA IS NULL"));
   }

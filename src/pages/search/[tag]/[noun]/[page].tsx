@@ -1,6 +1,6 @@
 import { Footer } from "@/components/common/footer";
 import Header from "@/components/common/header";
-import { ImageList } from "@/components/partials/imageList/list";
+import { ImageWrapper } from "@/components/partials/imageList/wrapper";
 import Head from "next/head";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       </Head>
       <Header />
       <main>
-        <ImageList />
+        <ImageWrapper />
       </main>
     </>
   );

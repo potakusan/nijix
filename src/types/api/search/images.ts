@@ -14,12 +14,12 @@ export interface ImageSdRatings {
 }
 
 export interface ImageUrlSet {
-  media_key: string;
   url: string;
-  type: string;
-  md5: string;
-  status: string;
-  backup_saved_url: string;
+  media_key?: string;
+  type?: string;
+  md5?: string;
+  status?: string;
+  backup_saved_url?: string;
 }
 
 export interface ImageResultSet

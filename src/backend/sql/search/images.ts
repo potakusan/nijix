@@ -2,39 +2,37 @@ import { ImageResultSet } from "@/types/api/search/images";
 import SQLFunc from "../../../../_sql";
 
 export class IllustAPI extends SQLFunc {
-  private showAll: boolean = false;
+  protected showAll: boolean = false;
 
-  private tags: string[] = [];
-  private nouns: string[] = [];
+  protected tags: string[] = [];
+  protected nouns: string[] = [];
 
   setTags = (str: string[]) => (this.tags = str);
   setNouns = (str: string[]) => (this.nouns = str);
 
-  private limit: number = 20;
-  private offset: number = 0;
+  protected limit: number = 20;
+  protected offset: number = 0;
 
   setLimit = (lim: number) => (this.limit = lim);
   setOffset = (off: number) => (this.offset = off);
 
-  private authorId: string | null = null;
+  protected authorId: string | null = null;
 
   setAuthorId = (authorId: string | null) => (this.authorId = authorId);
 
-  private sinceDate: null | string = null;
-  private untilDate: null | string = null;
+  protected sinceDate: null | string = null;
+  protected untilDate: null | string = null;
 
   setSinceDate = (date: string) => (this.sinceDate = date);
   setUntilDate = (date: string) => (this.untilDate = date);
 
-  private hparams: number[] = [0, 100];
-  private includes: boolean[] = [false, false, false];
+  protected hparams: number[] = [0, 100];
 
-  isHParamsChanged = () => this.hparams[0] !== 0 || this.hparams[1] !== 0;
+  isHParamsChanged = () => this.hparams[0] !== 0 || this.hparams[1] !== 100;
 
   setHParams = (min: number, max: number) => (this.hparams = [min, max]);
-  setIncludes = (min: number, max: number) => (this.hparams = [min, max]);
 
-  private aiMode: 0 | 1 | 2 = 2;
+  protected aiMode: 0 | 1 | 2 = 2;
   setAiMode = (aimode = 2) => {
     switch (aimode) {
       case 0:
@@ -91,17 +89,18 @@ export class IllustAPI extends SQLFunc {
         //tagもnounsも複数
       }
     }
+    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
 
-  private wheres: string[] = [];
-  private joins: string[] = [
+  protected wheres: string[] = [];
+  protected joins: string[] = [
     "JOIN authors ON t.author_id = authors.author_id",
-    "JOIN images ON t.id = images.id",
+    "JOIN images ON t.id = images.id AND images.increment = 1",
   ];
-  private cols: string[] = [
-    "DISTINCT t.id",
+  protected cols: string[] = [
+    "t.id",
     "t.text",
     "t.created_at",
     "t.added_at",
@@ -110,7 +109,6 @@ export class IllustAPI extends SQLFunc {
     "images.media_key",
     "images.url",
     "images.type",
-    "images.md5",
     "images.status",
     "images.backup_saved_url",
     "authors.author_id",
@@ -140,11 +138,17 @@ export class IllustAPI extends SQLFunc {
     if (input.cols) {
       this.cols = this.cols.concat(input.cols);
     }
+    this.mkCommons();
+  };
 
-    if (this.authorId) {
-      this.wheres.push(`t.author_id = ${this.e(this.authorId)}`);
-    }
+  protected mkCommons() {
+    this.mkCondArtist();
+    this.mkCondHParams();
+    this.mkCondAiMode();
+    this.mkCondDate();
+  }
 
+  protected mkCondHParams() {
     if (this.isHParamsChanged()) {
       this.wheres.push(
         `rates.explicit BETWEEN ${this.hparams[0] / 100} AND ${
@@ -159,7 +163,15 @@ export class IllustAPI extends SQLFunc {
         "rates.explicit",
       ]);
     }
+  }
 
+  protected mkCondArtist() {
+    if (this.authorId) {
+      this.wheres.push(`t.author_id = ${this.e(this.authorId)}`);
+    }
+  }
+
+  protected mkCondAiMode() {
     switch (this.aiMode) {
       case 0:
         this.wheres.push(`ai = 0`);
@@ -171,7 +183,9 @@ export class IllustAPI extends SQLFunc {
       default:
         break;
     }
+  }
 
+  protected mkCondDate() {
     if (this.sinceDate && this.untilDate) {
       this.wheres.push(
         `t.created_at BETWEEN ${this.e(this.sinceDate)} AND ${this.e(
@@ -179,9 +193,10 @@ export class IllustAPI extends SQLFunc {
         )}`
       );
     }
-  };
+  }
 
   searchWithNoCondition() {
+    this.makeConditions({});
     let sqlQuery = `
     SELECT 
         ${this.joinSelectedColumns()}
