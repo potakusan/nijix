@@ -70,6 +70,7 @@ export default async function handler(
   i.setAiMode(aiMode);
 
   const response = await i.execMethod();
+  i.destroy();
   if (response) {
     return res.status(200).json(makeSuccess(response[0].sum));
   } else {

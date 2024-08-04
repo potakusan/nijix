@@ -89,7 +89,6 @@ export class IllustAPI extends SQLFunc {
         //tagもnounsも複数
       }
     }
-    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
