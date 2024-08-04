@@ -77,7 +77,7 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
         <Text>Fetch Error</Text>
       </>
     );
-  if (isLoading || !data) return <SkeletonCloud _tag={_tag} _noun={_noun} />;
+  if (!data) return <SkeletonCloud _tag={_tag} _noun={_noun} />;
   return (
     <>
       <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
@@ -108,6 +108,8 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
       </HStack>
       {!isReachingEnd && (
         <Button
+          isLoading={isLoading}
+          loadingText="読込中"
           size="small"
           sx={{ width: "100%", padding: "4px 0", margin: "8px 0" }}
           colorScheme="blue"

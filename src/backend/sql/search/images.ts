@@ -61,6 +61,7 @@ export class IllustAPI extends SQLFuncWrapper {
     "t.added_at",
     "t.text_lower",
     "t.has_images",
+    "t.ai",
     "images.media_key",
     "images.url",
     "images.type",
@@ -138,6 +139,7 @@ export class IllustAPI extends SQLFuncWrapper {
   }
 
   protected mkCondDate() {
+    console.log(this.sinceDate, this.untilDate);
     if (this.sinceDate && this.untilDate) {
       this.wheres.push(
         `t.created_at BETWEEN ${this.e(this.sinceDate)} AND ${this.e(

@@ -1,79 +1,55 @@
+import { RequestFormatter } from "@/backend/requests/formatter";
 import { IllustMetaAPI } from "@/backend/sql/meta/images";
 import {
   checkHTTPRequests,
   makeError,
   makeSuccess,
 } from "@/backend/validator/httpRequests";
-import { validateDates } from "@/backend/validator/search/illustDates";
-import { SearchImageResult } from "@/types/api/search/images";
-import dayjs from "dayjs";
+import { CommonQueries } from "@/types/api/common/inputs";
+import { MetaImageResult } from "@/types/api/meta/images";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SearchImageResult>
+  res: NextApiResponse<MetaImageResult>
 ) {
   const { isValidReuest, requestErrorMessage } = checkHTTPRequests(req, "get");
   if (!isValidReuest) {
-    return res
-      .status(403)
-      .json({ error: true, errorMessage: requestErrorMessage, body: [] });
+    return res.status(403).json(makeError(requestErrorMessage, 0));
   }
   const i = await new IllustMetaAPI().connect();
 
-  let tags = (req.query.tags as string) || null;
-  if (tags === "_") tags = null;
-  let nouns = (req.query.nouns as string) || null;
-  if (nouns === "_") nouns = null;
-  const authorId = (req.query.authorId as string) || null || null;
-  const aiMode = Number(req.query.aiMode as string) || 2;
-  const hparam = ((req.query.hparams as string) || "0,100").split(",") || [
-    "0",
-    "100",
-  ];
-  const [min, max] = [Number(hparam[0]), Number(hparam[1])];
-
-  if (
-    !validateDates(req.query.sinceDate as string, req.query.untilDate as string)
-  ) {
-    res.status(403).json(makeError("INVALID DATE GIVEN"));
-    return;
+  const { success, inputs } = RequestFormatter(req.query as CommonQueries);
+  if (!success || !inputs) {
+    return res.status(403).json(makeError("VALIDATION ERROR", 0));
   }
 
-  const sinceDate = (
-    req.query.sinceDate
-      ? dayjs(req.query.sinceDate as string)
-      : dayjs().subtract(100, "year")
-  ).format("YYYY-MM-DD");
-  const untilDate = (
-    req.query.untilDate
-      ? dayjs(req.query.untilDate as string)
-      : dayjs().add(1, "year")
-  ).format("YYYY-MM-DD");
-
-  if (!tags) {
+  if (!inputs.tags) {
     i.setTags([]);
   } else {
-    i.setTags(tags.split(","));
+    i.setTags(inputs.tags);
   }
 
-  if (!nouns) {
+  if (!inputs.nouns) {
     i.setNouns([]);
   } else {
-    i.setNouns(nouns.split(","));
+    i.setNouns(inputs.nouns);
   }
 
-  i.setAuthorId(authorId);
-  i.setSinceDate(sinceDate);
-  i.setUntilDate(untilDate);
-  i.setHParams(min, max);
-  i.setAiMode(aiMode);
+  i.setOffset(inputs.offset);
+  i.setLimit(inputs.limit);
+  i.setAuthorId(inputs.authorId);
+  i.setSinceDate(inputs.sinceDate);
+  i.setUntilDate(inputs.untilDate);
+  i.setHParams(inputs.hParams[0], inputs.hParams[1]);
+  i.setSort(inputs.sort, inputs.seed);
+  i.setAiMode(inputs.aiMode);
 
   const response = await i.execMethod();
   i.destroy();
   if (response) {
     return res.status(200).json(makeSuccess(response[0].sum));
   } else {
-    return res.status(500).json(makeError("REPONSE DATA IS NULL"));
+    return res.status(500).json(makeError("REPONSE DATA IS NULL", 0));
   }
 }

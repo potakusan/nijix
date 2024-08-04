@@ -1,6 +1,7 @@
 import { textConverts } from "@/_frontend/convert";
 import { generateOriginalUrl } from "@/_frontend/generateOriginalUrl";
 import { ImageResultSet } from "@/types/api/search/images";
+import { CopyIcon, WarningIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
@@ -17,6 +18,9 @@ import {
   AlertTitle,
   AlertDescription,
   Skeleton,
+  HStack,
+  Tag,
+  TagLeftIcon,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FC, useState } from "react";
@@ -78,6 +82,10 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
               sx={{
                 objectFit: "cover",
                 margin: "0 auto",
+                transition: ".2s",
+                ":hover": {
+                  opacity: "0.8",
+                },
               }}
               onError={(e) => {
                 if (e.currentTarget.src === props.backup_saved_url) {
@@ -116,6 +124,27 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
               </AlertDescription>
             </Alert>
           )}
+          <HStack
+            spacing={1}
+            sx={{
+              position: "absolute",
+              right: "8px",
+              top: "10px",
+            }}
+          >
+            {props.ai && (
+              <Tag variant="solid" colorScheme="facebook">
+                <TagLeftIcon as={WarningIcon} />
+                AIイラスト
+              </Tag>
+            )}
+            {props.has_images > 1 && (
+              <Tag variant="solid" colorScheme="facebook">
+                <TagLeftIcon as={CopyIcon} />
+                {props.has_images}枚
+              </Tag>
+            )}
+          </HStack>
         </Link>
         <Stack mt="6" spacing="3">
           <Heading size="md">
@@ -152,6 +181,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             ソース
           </Button>
           <Button
+            isDisabled={unavailable}
             href={href}
             as={"a"}
             variant="solid"
@@ -162,6 +192,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
           </Button>
           <Button
             as="a"
+            isDisabled={unavailable}
             href={`/similarTo/${props.id}`}
             variant="outline"
             colorScheme="facebook"

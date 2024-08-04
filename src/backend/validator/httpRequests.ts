@@ -1,4 +1,5 @@
-import { ImageResultSet } from "@/types/api/search/images";
+import { MetaImageResult } from "@/types/api/meta/images";
+import { ImageResultSet, SearchImageResult } from "@/types/api/search/images";
 import { TagExplorerResultSet } from "@/types/api/tags/explore";
 import { NextApiRequest } from "next";
 
@@ -16,9 +17,12 @@ export const checkHTTPRequests = (
   };
 };
 
-export const makeError = (errorMessage: string = "Unexpected Error") => ({
+export const makeError = (
+  errorMessage: string = "Unexpected Error",
+  body: any
+) => ({
   error: true,
-  body: [],
+  body: body,
   errorMessage: errorMessage,
 });
 

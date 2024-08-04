@@ -23,7 +23,7 @@ export default async function handler(
 
   const { success, inputs } = RequestFormatter(req.query as CommonQueries);
   if (!success || !inputs) {
-    return res.status(403).json(makeError("VALIDATION ERROR"));
+    return res.status(403).json(makeError("VALIDATION ERROR", []));
   }
 
   if (!inputs.tags) {
@@ -52,6 +52,6 @@ export default async function handler(
   if (response) {
     return res.status(200).json(makeSuccess(response));
   } else {
-    return res.status(500).json(makeError("RESPONSE DATA IS NULL"));
+    return res.status(500).json(makeError("RESPONSE DATA IS NULL", []));
   }
 }

@@ -8,26 +8,21 @@ import {
 } from "@/backend/validator/httpRequests";
 import { RequestFormatter } from "@/backend/requests/formatter";
 import { CommonQueries } from "@/types/api/common/inputs";
-
-type Data = {
-  error: boolean;
-  body: any[];
-  errorMessage?: string;
-};
+import { TagExplorerResult } from "@/types/api/tags/explore";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<TagExplorerResult>
 ) {
   const { isValidReuest, requestErrorMessage } = checkHTTPRequests(req, "get");
   if (!isValidReuest) {
-    return res.status(403).json(makeError(requestErrorMessage));
+    return res.status(403).json(makeError(requestErrorMessage, []));
   }
   const i = await new TagExplorer().connect();
 
   const { success, inputs } = RequestFormatter(req.query as CommonQueries);
   if (!success || !inputs) {
-    return res.status(403).json(makeError("VALIDATION ERROR"));
+    return res.status(403).json(makeError("VALIDATION ERROR", []));
   }
 
   if (!inputs.tags) {
@@ -56,6 +51,6 @@ export default async function handler(
   if (response) {
     return res.status(200).json(makeSuccess(response));
   } else {
-    return res.status(500).json(makeError("RESPONSE DATA IS NULL"));
+    return res.status(500).json(makeError("RESPONSE DATA IS NULL", []));
   }
 }

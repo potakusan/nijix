@@ -16,6 +16,7 @@ export const PagingWrapper: FC = () => {
   const router = useRouter();
   const { tag, noun } = router.query;
   const [currentPage, setCurrentPage] = useState<number | null>(null);
+  const params = useSearchParams();
   const { data, error, isLoading } = useSWR<MetaImageResult>(
     tag && noun ? `/meta/images?tags=${tag}&nouns=${noun}` : null,
     fetcher
@@ -26,7 +27,9 @@ export const PagingWrapper: FC = () => {
     isLoading: listLoading,
   } = useSWR<SearchImageResult>(
     tag && noun && currentPage
-      ? `/search/images?sort=added_at,desc&tags=${tag}&nouns=${noun}&limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}&offset=${
+      ? `/search/images?sort=${
+          params.get("sort") || "created_at,desc"
+        }&tags=${tag}&nouns=${noun}&limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}&offset=${
           (Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE
         }`
       : null,
