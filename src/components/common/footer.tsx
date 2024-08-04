@@ -1,11 +1,9 @@
-import { Typography } from "antd";
-
-const { Text, Paragraph } = Typography;
+import { Box, Text } from "@chakra-ui/react";
 
 export const Footer = () => (
   <footer>
-    <Paragraph style={{ textAlign: "center" }}>
-      <Text type="secondary">&copy; 2024 NijiX</Text>
-    </Paragraph>
+    <Box style={{ textAlign: "center" }}>
+      <Text>&copy; 2024 NijiX</Text>
+    </Box>
   </footer>
 );

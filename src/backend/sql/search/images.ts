@@ -53,6 +53,7 @@ export class IllustAPI extends SQLFunc {
     const tlen = this.tags.length;
     const nlen = this.nouns.length;
     let query = "";
+    console.log(this.tags, this.nouns);
     if (tlen === 0) {
       if (nlen === 0) {
         //検索条件なし
@@ -95,14 +96,23 @@ export class IllustAPI extends SQLFunc {
   }
 
   private wheres: string[] = [];
-  private joins: string[] = ["JOIN authors ON t.author_id = authors.author_id"];
+  private joins: string[] = [
+    "JOIN authors ON t.author_id = authors.author_id",
+    "JOIN images ON t.id = images.id",
+  ];
   private cols: string[] = [
-    "t.id",
+    "DISTINCT t.id",
     "t.text",
     "t.created_at",
     "t.added_at",
     "t.text_lower",
     "t.has_images",
+    "images.media_key",
+    "images.url",
+    "images.type",
+    "images.md5",
+    "images.status",
+    "images.backup_saved_url",
     "authors.author_id",
     "authors.username",
     "authors.description",
@@ -178,6 +188,7 @@ export class IllustAPI extends SQLFunc {
     FROM tweets AS t
     ${this.joinJoins()}
     ${this.joinWhereConditions()}
+    ${this.orderBy()}
     LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
     return sqlQuery;
   }
@@ -204,6 +215,7 @@ export class IllustAPI extends SQLFunc {
     FROM tweets AS t
     ${this.joinJoins()}
     ${this.joinWhereConditions()}
+    ${this.orderBy()}
     LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
     return sqlQuery;
   }
@@ -231,6 +243,7 @@ export class IllustAPI extends SQLFunc {
     FROM tweets AS t
     ${this.joinJoins()}
     ${this.joinWhereConditions()}
+    ${this.orderBy()}
     LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
     return sqlQuery;
   }

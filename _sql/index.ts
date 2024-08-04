@@ -64,4 +64,10 @@ export default class SQLFunc {
         "RAND(" + Number(seed || Math.floor(Math.random() * 10110011)) + ")";
     }
   }
+
+  protected orderBy() {
+    return `ORDER BY ${
+      this.sortBy === "added_at" || this.sortBy === "created_at" ? "t." : ""
+    }${this.sortBy} ${this.sortOrd}`;
+  }
 }

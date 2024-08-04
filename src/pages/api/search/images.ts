@@ -21,8 +21,8 @@ export default async function handler(
   }
   const i = await new IllustAPI().connect();
 
-  const tags = (req.query.tags as string) || "";
-  const nouns = (req.query.nouns as string) || "";
+  const tags = (req.query.tags as string) || null;
+  const nouns = (req.query.nouns as string) || null;
   const limit = Number(req.query.limit as string) || 20;
   const offset = Number(req.query.offset as string) || 0;
   const authorId = (req.query.authorId as string) || null || null;
@@ -53,13 +53,13 @@ export default async function handler(
       : dayjs().add(1, "year")
   ).format("YYYY-MM-DD");
 
-  if (tags === "_") {
+  if (!tags) {
     i.setTags([]);
   } else {
     i.setTags(tags.split(","));
   }
 
-  if (nouns === "_") {
+  if (!nouns) {
     i.setNouns([]);
   } else {
     i.setNouns(nouns.split(","));
