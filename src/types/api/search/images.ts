@@ -20,6 +20,7 @@ export interface ImageUrlSet {
   md5?: string;
   status?: string;
   backup_saved_url?: string;
+  px_thumb?: string;
 }
 
 export interface ImageResultSet

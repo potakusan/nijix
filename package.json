@@ -21,7 +21,7 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
-    "react-paginate": "^8.2.0",
+    "react-responsive-pagination": "git+https://github.com/potakusan/react-responsive-pagination.git",
     "swr": "^2.2.5"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import mysql from "mysql2/promise";
 import { db_setting } from "../_config/config";
 
-export default class SQLFunc {
+class SQLFunc {
   con: mysql.Connection | null = null;
 
   async connect(): Promise<this> {
@@ -70,4 +70,66 @@ export default class SQLFunc {
       this.sortBy === "added_at" || this.sortBy === "created_at" ? "t." : ""
     }${this.sortBy} ${this.sortOrd}`;
   }
+
+  protected makeTags = (_tags: string[], _nouns: string[]) => {
+    const tags = [];
+    const nouns = [];
+    for (let i = 0; i < _tags.length; ++i) {
+      if (_tags[i] === "_") continue;
+      tags.push(_tags[i]);
+    }
+    for (let i = 0; i < _nouns.length; ++i) {
+      if (_nouns[i] === "_") continue;
+      nouns.push(_nouns[i]);
+    }
+    return [tags, nouns];
+  };
+}
+
+export default class SQLFuncWrapper extends SQLFunc {
+  protected tags: string[] = [];
+  protected nouns: string[] = [];
+
+  setTags = (str: string[]) => (this.tags = str);
+  setNouns = (str: string[]) => (this.nouns = str);
+
+  protected limit: number = 20;
+  protected offset: number = 0;
+
+  setLimit = (lim: number) => (this.limit = lim);
+  setOffset = (off: number) => (this.offset = off);
+
+  protected authorId: string | null = null;
+
+  setAuthorId = (authorId: string | null) => (this.authorId = authorId);
+
+  protected view: "tags" | "nouns" = "tags";
+
+  setView = (input: "tags" | "nouns") => (this.view = input);
+
+  protected sinceDate: null | string = null;
+  protected untilDate: null | string = null;
+
+  setSinceDate = (date: string | null) => (this.sinceDate = date);
+  setUntilDate = (date: string | null) => (this.untilDate = date);
+
+  protected hparams: number[] = [0, 100];
+
+  isHParamsChanged = () => this.hparams[0] !== 0 || this.hparams[1] !== 100;
+
+  setHParams = (min: number, max: number) => (this.hparams = [min, max]);
+
+  protected aiMode: 0 | 1 | 2 = 2;
+  setAiMode = (aimode = 2) => {
+    switch (aimode) {
+      case 0:
+      case 1:
+      case 2:
+        this.aiMode = aimode;
+        break;
+      default:
+        this.aiMode = 2;
+        break;
+    }
+  };
 }

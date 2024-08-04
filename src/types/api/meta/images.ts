@@ -10,3 +10,9 @@ export interface MetaImageResultSet extends RowDataPacket {
   [key: string]: any;
 }
 [];
+
+export interface ConditionInputs {
+  wheres?: string[];
+  joins?: string[];
+  cols?: string[];
+}

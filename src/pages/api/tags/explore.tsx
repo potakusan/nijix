@@ -1,25 +1,29 @@
-import { IllustAPI } from "@/backend/sql/search/images";
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import type { NextApiRequest, NextApiResponse } from "next";
+import { TagExplorer } from "@/backend/sql/tags/explore";
 import {
   checkHTTPRequests,
   makeError,
   makeSuccess,
 } from "@/backend/validator/httpRequests";
-import { SearchImageResult } from "@/types/api/search/images";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { RequestFormatter } from "@/backend/requests/formatter";
 import { CommonQueries } from "@/types/api/common/inputs";
 
+type Data = {
+  error: boolean;
+  body: any[];
+  errorMessage?: string;
+};
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SearchImageResult>
+  res: NextApiResponse<Data>
 ) {
   const { isValidReuest, requestErrorMessage } = checkHTTPRequests(req, "get");
   if (!isValidReuest) {
-    return res
-      .status(403)
-      .json({ error: true, errorMessage: requestErrorMessage, body: [] });
+    return res.status(403).json(makeError(requestErrorMessage));
   }
-  const i = await new IllustAPI().connect();
+  const i = await new TagExplorer().connect();
 
   const { success, inputs } = RequestFormatter(req.query as CommonQueries);
   if (!success || !inputs) {
@@ -38,16 +42,16 @@ export default async function handler(
     i.setNouns(inputs.nouns);
   }
 
+  i.setView(inputs.view);
   i.setOffset(inputs.offset);
   i.setLimit(inputs.limit);
   i.setAuthorId(inputs.authorId);
   i.setSinceDate(inputs.sinceDate);
   i.setUntilDate(inputs.untilDate);
   i.setHParams(inputs.hParams[0], inputs.hParams[1]);
-  i.setSort(inputs.sort, inputs.seed);
   i.setAiMode(inputs.aiMode);
 
-  const response = await i.execMethod();
+  const response = await i.get();
   i.destroy();
   if (response) {
     return res.status(200).json(makeSuccess(response));

@@ -1,29 +1,21 @@
 "use client";
 
-import { fetcher } from "@/_frontend/fetch";
 import { SearchImageResult } from "@/types/api/search/images";
 import { FC } from "react";
-import useSWR from "swr";
-import { ImageCard } from "./card";
+import { ImageCard, ImageCardSkeleton } from "./card";
 import { SimpleGrid } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { GLOBAL_ITEM_NUMBERS_PER_PAGE } from "../../../../_config/config";
 
-export const ImageList: FC<{}> = () => {
-  const router = useRouter();
-  const { tag, noun, page } = router.query;
-  const { data, error, isLoading } = useSWR<SearchImageResult>(
-    `/search/images?sort=added_at,desc&tags=${tag}&nouns=${noun}&limit=18&offset=${
-      (Number(page || 1) - 1) * 18 + 1
-    }`,
-    fetcher
-  );
-
-  if (error) return <>Error</>;
-  if (isLoading) return <>Loading</>;
+export const ImageList: FC<{
+  listError: boolean;
+  listLoading: boolean;
+  listBody: SearchImageResult | undefined;
+}> = ({ listBody, listError, listLoading }) => {
+  if (listError) return <>Error</>;
   return (
     <SimpleGrid
-      columns={[1, 1, 2, 3]}
-      spacing="40px"
+      columns={[1, 1, 2, 3, 4]}
+      spacing="20px"
       sx={{
         "@media screen and (max-width:768px)": {
           display: "flex",
@@ -32,7 +24,11 @@ export const ImageList: FC<{}> = () => {
         },
       }}
     >
-      {data?.body.map((item) => (
+      {listLoading &&
+        [...Array(GLOBAL_ITEM_NUMBERS_PER_PAGE)].map((_, i) => (
+          <ImageCardSkeleton key={i} />
+        ))}
+      {listBody?.body.map((item) => (
         <ImageCard key={item.id} {...item} />
       ))}
     </SimpleGrid>

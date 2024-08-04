@@ -1,57 +1,13 @@
 import { ImageResultSet } from "@/types/api/search/images";
-import SQLFunc from "../../../../_sql";
+import SQLFuncWrapper from "../../../../_sql";
+import { ConditionInputs } from "@/types/api/meta/images";
 
-export class IllustAPI extends SQLFunc {
-  protected showAll: boolean = false;
-
-  protected tags: string[] = [];
-  protected nouns: string[] = [];
-
-  setTags = (str: string[]) => (this.tags = str);
-  setNouns = (str: string[]) => (this.nouns = str);
-
-  protected limit: number = 20;
-  protected offset: number = 0;
-
-  setLimit = (lim: number) => (this.limit = lim);
-  setOffset = (off: number) => (this.offset = off);
-
-  protected authorId: string | null = null;
-
-  setAuthorId = (authorId: string | null) => (this.authorId = authorId);
-
-  protected sinceDate: null | string = null;
-  protected untilDate: null | string = null;
-
-  setSinceDate = (date: string) => (this.sinceDate = date);
-  setUntilDate = (date: string) => (this.untilDate = date);
-
-  protected hparams: number[] = [0, 100];
-
-  isHParamsChanged = () => this.hparams[0] !== 0 || this.hparams[1] !== 100;
-
-  setHParams = (min: number, max: number) => (this.hparams = [min, max]);
-
-  protected aiMode: 0 | 1 | 2 = 2;
-  setAiMode = (aimode = 2) => {
-    switch (aimode) {
-      case 0:
-      case 1:
-      case 2:
-        this.aiMode = aimode;
-        break;
-      default:
-        this.aiMode = 2;
-        break;
-    }
-  };
-
+export class IllustAPI extends SQLFuncWrapper {
   async execMethod() {
     if (!this.con) return;
     const tlen = this.tags.length;
     const nlen = this.nouns.length;
     let query = "";
-    console.log(this.tags, this.nouns);
     if (tlen === 0) {
       if (nlen === 0) {
         //検索条件なし
@@ -110,6 +66,7 @@ export class IllustAPI extends SQLFunc {
     "images.type",
     "images.status",
     "images.backup_saved_url",
+    "images.px_thumb",
     "authors.author_id",
     "authors.username",
     "authors.description",
@@ -123,19 +80,15 @@ export class IllustAPI extends SQLFunc {
   joinJoins = () => this.joins.join(" ");
   joinSelectedColumns = () => this.cols.join(",");
 
-  makeConditions = (input: {
-    wheres?: string[];
-    joins?: string[];
-    cols?: string[];
-  }) => {
+  makeConditions = (input: ConditionInputs) => {
+    if (input.cols) {
+      this.cols = this.cols.concat(input.cols);
+    }
     if (input.wheres) {
       this.wheres = this.wheres.concat(input.wheres);
     }
     if (input.joins) {
       this.joins = this.joins.concat(input.joins);
-    }
-    if (input.cols) {
-      this.cols = this.cols.concat(input.cols);
     }
     this.mkCommons();
   };

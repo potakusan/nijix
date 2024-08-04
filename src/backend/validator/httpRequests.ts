@@ -1,4 +1,5 @@
 import { ImageResultSet } from "@/types/api/search/images";
+import { TagExplorerResultSet } from "@/types/api/tags/explore";
 import { NextApiRequest } from "next";
 
 export const checkHTTPRequests = (
@@ -21,7 +22,9 @@ export const makeError = (errorMessage: string = "Unexpected Error") => ({
   errorMessage: errorMessage,
 });
 
-export const makeSuccess = (datasets: ImageResultSet[]) => ({
+export const makeSuccess = (
+  datasets: ImageResultSet[] | TagExplorerResultSet[] | any
+) => ({
   error: false,
   body: datasets,
   errorMessage: "",

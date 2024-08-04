@@ -6,9 +6,7 @@ import { PagingWrapper } from "./pagenation";
 export const ImageWrapper: FC<{}> = (props) => {
   return (
     <Box>
-      <PagingWrapper>
-        <ImageList />
-      </PagingWrapper>
+      <PagingWrapper />
     </Box>
   );
 };
