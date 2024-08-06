@@ -10,7 +10,7 @@ import {
   Button,
   Heading,
   HStack,
-  Link,
+  Link as RLink,
   Skeleton,
   Tag,
   TagLabel,
@@ -21,6 +21,7 @@ import { SmallAddIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { generateNewPath } from "@/_frontend/generateNewPath";
 import { useSearchParams } from "next/navigation";
 import useSWRInfinite from "swr/infinite";
+import Link from "next/link";
 
 export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
   _tag,
@@ -95,13 +96,18 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
             const path = newPath(item.tag);
             const exists = isExists(item.tag);
             return (
-              <Link href={path} key={item.tag}>
-                <Tag colorScheme="blue" variant={exists ? "solid" : "outline"}>
-                  <TagLabel>
-                    {item.tag}({item.num})
-                  </TagLabel>
-                  <TagRightIcon as={exists ? SmallCloseIcon : SmallAddIcon} />
-                </Tag>
+              <Link href={path} key={item.tag} passHref>
+                <RLink>
+                  <Tag
+                    colorScheme="blue"
+                    variant={exists ? "solid" : "outline"}
+                  >
+                    <TagLabel>
+                      {item.tag}({item.num})
+                    </TagLabel>
+                    <TagRightIcon as={exists ? SmallCloseIcon : SmallAddIcon} />
+                  </Tag>
+                </RLink>
               </Link>
             );
           })}

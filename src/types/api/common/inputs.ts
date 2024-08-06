@@ -1,4 +1,4 @@
-export interface CommonRequestInputs {
+export interface CommonSearchRequestInputs {
   tags: string[] | null;
   nouns: string[] | null;
   limit: number;
@@ -11,6 +11,10 @@ export interface CommonRequestInputs {
   sort: string;
   seed: string;
   view: "tags" | "nouns";
+}
+
+export interface CommonIndivisualImageRequestInputs {
+  id: string;
 }
 
 export interface CommonQueries {

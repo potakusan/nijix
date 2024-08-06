@@ -2,3 +2,41 @@
 .loading .page-item a {
   cursor: no-drop;
 }
+
+.slick-prev:before,
+.slick-next:before {
+  color: black !important;
+}
+
+.slick-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.slick-prev {
+  left: 0 !important;
+}
+.slick-next {
+  right: 0 !important;
+}
+
+.slick-dots {
+  position: relative !important;
+  bottom: 0 !important;
+}
+
+.slick-list,
+.slick-list img {
+  min-height: 600px;
+  height: 60vh;
+}
+
+.slick-slide img {
+  object-fit: contain;
+}
+
+.clear {
+  clear: both;
+}

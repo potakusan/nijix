@@ -6,8 +6,8 @@ import {
 } from "@/backend/validator/httpRequests";
 import { SearchImageResult } from "@/types/api/search/images";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { RequestFormatter } from "@/backend/requests/formatter";
 import { CommonQueries } from "@/types/api/common/inputs";
+import { SearchRequestFormatter } from "@/backend/requests/searchRequest";
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +21,9 @@ export default async function handler(
   }
   const i = await new IllustAPI().connect();
 
-  const { success, inputs } = RequestFormatter(req.query as CommonQueries);
+  const { success, inputs } = SearchRequestFormatter(
+    req.query as CommonQueries
+  );
   if (!success || !inputs) {
     return res.status(403).json(makeError("VALIDATION ERROR", []));
   }

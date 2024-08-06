@@ -1,15 +1,15 @@
 import { NextApiRequest } from "next";
 import { validateDates } from "../validator/search/illustDates";
-import { CommonRequestInputs } from "@/types/api/common/inputs";
+import { CommonSearchRequestInputs } from "@/types/api/common/inputs";
 import dayjs from "dayjs";
 
-export const RequestFormatter = (queries: {
+export const SearchRequestFormatter = (queries: {
   [key: string]: string;
 }): {
   success: boolean;
-  inputs?: CommonRequestInputs;
+  inputs?: CommonSearchRequestInputs;
 } => {
-  const inputs: CommonRequestInputs = {
+  const inputs: CommonSearchRequestInputs = {
     tags: [],
     nouns: [],
     limit: 0,

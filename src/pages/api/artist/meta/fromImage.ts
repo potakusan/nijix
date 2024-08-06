@@ -1,5 +1,5 @@
-import { SearchRequestFormatter } from "@/backend/requests/searchRequest";
-import { IllustMetaAPI } from "@/backend/sql/meta/images";
+import { IndivisualImageRequestFormatter } from "@/backend/requests/indivisualImageRequest";
+import { IndivisualArtistAPI } from "@/backend/sql/artist";
 import {
   checkHTTPRequests,
   makeError,
@@ -17,40 +17,19 @@ export default async function handler(
   if (!isValidReuest) {
     return res.status(403).json(makeError(requestErrorMessage, 0));
   }
-  const i = await new IllustMetaAPI().connect();
+  const i = await new IndivisualArtistAPI().connect();
 
-  const { success, inputs } = SearchRequestFormatter(
+  const { success, inputs } = IndivisualImageRequestFormatter(
     req.query as CommonQueries
   );
   if (!success || !inputs) {
     return res.status(403).json(makeError("VALIDATION ERROR", 0));
   }
 
-  if (!inputs.tags) {
-    i.setTags([]);
-  } else {
-    i.setTags(inputs.tags);
-  }
-
-  if (!inputs.nouns) {
-    i.setNouns([]);
-  } else {
-    i.setNouns(inputs.nouns);
-  }
-
-  i.setOffset(inputs.offset);
-  i.setLimit(inputs.limit);
-  i.setAuthorId(inputs.authorId);
-  i.setSinceDate(inputs.sinceDate);
-  i.setUntilDate(inputs.untilDate);
-  i.setHParams(inputs.hParams[0], inputs.hParams[1]);
-  i.setSort(inputs.sort, inputs.seed);
-  i.setAiMode(inputs.aiMode);
-
-  const response = await i.execMethod();
+  const response = await i.setId(inputs.id).execMethod();
   i.destroy();
   if (response) {
-    return res.status(200).json(makeSuccess(response[0].sum));
+    return res.status(200).json(makeSuccess(response));
   } else {
     return res.status(500).json(makeError("REPONSE DATA IS NULL", 0));
   }

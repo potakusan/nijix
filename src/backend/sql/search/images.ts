@@ -46,6 +46,7 @@ export class IllustAPI extends SQLFuncWrapper {
       }
     }
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
+    console.log(query);
     return rows;
   }
 
