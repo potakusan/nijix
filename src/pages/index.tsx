@@ -1,4 +1,3 @@
-import { Footer } from "@/components/common/footer";
 import Header from "@/components/common/header";
 import Head from "next/head";
 
@@ -10,7 +9,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <Footer />
     </>
   );
 }
