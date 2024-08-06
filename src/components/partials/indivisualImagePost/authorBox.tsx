@@ -47,7 +47,12 @@ export default function ArtistBox() {
               passHref
               target="_blank"
               rel="noopener noreferrer"
-              href={generateOriginalUrl(data.body[0])}
+              href={generateOriginalUrl(
+                false,
+                id as string,
+                data.body[0].source,
+                data.body[0].author_id
+              )}
             >
               <Tag
                 size={"small"}

@@ -28,6 +28,7 @@ export default function RelatedImages() {
       </Heading>
       <Slider
         slidesToShow={6}
+        slidesToScroll={3}
         responsive={[
           {
             breakpoint: 768,

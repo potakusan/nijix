@@ -22,12 +22,18 @@ export class TagExplorer extends SQLFuncWrapper {
         )} AND ${this.con.escape(this.hparams[1] / 100)}`
       );
     }
-
     // Author and date conditions
     const needsTweetsJoin =
-      this.authorId !== null || (this.sinceDate && this.untilDate);
+      this.authorId !== null ||
+      (this.sinceDate && this.untilDate) ||
+      this.aiMode < 2;
     if (needsTweetsJoin) {
       joins.push("JOIN tweets tw ON i.id = tw.id");
+      if (this.aiMode === 0) {
+        conditions.push(`tw.ai = 0`);
+      } else if (this.aiMode === 1) {
+        conditions.push(`tw.ai = 1`);
+      }
       if (this.authorId !== null) {
         conditions.push(`tw.author_id = ${this.con.escape(this.authorId)}`);
       }

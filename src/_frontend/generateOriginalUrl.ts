@@ -2,8 +2,22 @@ import { ArtistMetaResultSet } from "@/types/api/artist";
 import { ImageResultSet } from "@/types/api/search/images";
 
 export const generateOriginalUrl = (
-  data: ImageResultSet | ArtistMetaResultSet
+  data:
+    | ImageResultSet
+    | ArtistMetaResultSet
+    | false
+    | { id: string; source: string; author_id: string },
+  id?: string,
+  source?: string,
+  author_id?: string
 ) => {
+  if (data === false) {
+    data = {
+      id: id!,
+      source: source!,
+      author_id: author_id!,
+    };
+  }
   if (data.source === "twitter") {
     return "https://twitter.com/__/status/" + data.id;
   } else if (data.source === "nijie") {
