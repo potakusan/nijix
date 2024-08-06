@@ -15,4 +15,6 @@ export interface ArtistMetaResultSet extends RowDataPacket {
   source: string;
   id: string;
   url: string;
+  backup_saved_url: string;
+  px_thumb?: string;
 }

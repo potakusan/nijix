@@ -5,6 +5,7 @@ import { ConditionInputs } from "@/types/api/meta/images";
 export class IllustMetaAPI extends IllustAPI {
   setOverrideCols = () => (this.cols = ["COUNT(t.id) AS sum"]);
   makeConditions = (input: ConditionInputs) => {
+    this.mkCommons();
     if (input.cols) {
       this.cols = this.cols.concat(input.cols);
     }
@@ -14,7 +15,6 @@ export class IllustMetaAPI extends IllustAPI {
     if (input.joins) {
       this.joins = this.joins.concat(input.joins);
     }
-    this.mkCommons();
     this.setOverrideCols();
   };
 }

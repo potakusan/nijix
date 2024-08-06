@@ -40,3 +40,7 @@ export interface ImageResultSet
   updated_at: string;
   source: string;
 }
+
+export interface TagStringSet extends RowDataPacket {
+  tag: string[];
+}

@@ -11,3 +11,8 @@ export interface TagExplorerResultSet extends RowDataPacket {
   tag: string;
 }
 [];
+
+export interface TagWithIdResultSet extends RowDataPacket {
+  tag: string;
+  id: string;
+}

@@ -78,7 +78,6 @@ export class TagExplorer extends SQLFuncWrapper {
       ORDER BY num DESC
       LIMIT ${Number(this.limit)} OFFSET ${Number(this.offset)}
     `;
-    console.log(query);
     const [rows, _fields] = await this.con.execute<TagExplorerResultSet[]>(
       query
     );

@@ -46,7 +46,6 @@ export class IllustAPI extends SQLFuncWrapper {
       }
     }
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
-    console.log(query);
     return rows;
   }
 
@@ -83,6 +82,7 @@ export class IllustAPI extends SQLFuncWrapper {
   joinSelectedColumns = () => this.cols.join(",");
 
   makeConditions = (input: ConditionInputs) => {
+    this.mkCommons();
     if (input.cols) {
       this.cols = this.cols.concat(input.cols);
     }
@@ -92,7 +92,6 @@ export class IllustAPI extends SQLFuncWrapper {
     if (input.joins) {
       this.joins = this.joins.concat(input.joins);
     }
-    this.mkCommons();
   };
 
   protected mkCommons() {
@@ -140,7 +139,6 @@ export class IllustAPI extends SQLFuncWrapper {
   }
 
   protected mkCondDate() {
-    console.log(this.sinceDate, this.untilDate);
     if (this.sinceDate && this.untilDate) {
       this.wheres.push(
         `t.created_at BETWEEN ${this.e(this.sinceDate)} AND ${this.e(
@@ -176,7 +174,7 @@ export class IllustAPI extends SQLFuncWrapper {
           ? `tags.tag = ${this.e(tag)}`
           : `noun_tags.tag = ${this.e(tag)}`,
       ],
-      joins: [`JOIN ${target} ON t.id = tags.id`],
+      joins: [`JOIN ${target} ON ${target}.id = t.id`],
     });
 
     let sqlQuery = `

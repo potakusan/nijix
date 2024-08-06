@@ -249,6 +249,11 @@ const NAV_ITEMS: Array<NavItem> = [
         subLabel: "キャラクター名/特徴/ポージングなどの特徴タグから探します。",
         href: "#",
       },
+      {
+        label: "全て表示",
+        subLabel: "新着順にすべてのイラストを表示します。",
+        href: "/search/_/_/1",
+      },
     ],
   },
 ];

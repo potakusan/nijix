@@ -1,6 +1,9 @@
+import { ArtistMetaResultSet } from "@/types/api/artist";
 import { ImageResultSet } from "@/types/api/search/images";
 
-export const generateOriginalUrl = (data: ImageResultSet) => {
+export const generateOriginalUrl = (
+  data: ImageResultSet | ArtistMetaResultSet
+) => {
   if (data.source === "twitter") {
     return "https://twitter.com/__/status/" + data.id;
   } else if (data.source === "nijie") {

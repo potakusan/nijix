@@ -8,10 +8,8 @@ import {
   Heading,
   Link,
   Stack,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
@@ -95,11 +93,11 @@ export default function SearchByTagAndNouns() {
           )}
         </Heading>
       </Stack>
-      <Grid h="200px" templateColumns={"repeat(12, 1fr)"} gap={4}>
-        <GridItem colSpan={{ sm: 12, md: 3, lg: 2 }}>
+      <Grid templateColumns={"repeat(12, 1fr)"} gap={4}>
+        <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
           <ConditionsSelector />
         </GridItem>
-        <GridItem colSpan={{ sm: 12, md: 9, lg: 10 }}>
+        <GridItem colSpan={{ base: 12, sm: 12, md: 9, lg: 10 }}>
           <PagingWrapper />
         </GridItem>
       </Grid>

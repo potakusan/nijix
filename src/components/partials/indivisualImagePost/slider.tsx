@@ -1,6 +1,4 @@
-import { Box, Image } from "@chakra-ui/react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Box, Image, Skeleton } from "@chakra-ui/react";
 
 import Slider from "react-slick";
 import useSWR from "swr";
@@ -12,6 +10,7 @@ const settings = {
   dots: true,
   infinite: false,
   slidesToScroll: 1,
+  slidesPerRow: 1,
 };
 
 export default function Carousel() {
@@ -23,14 +22,19 @@ export default function Carousel() {
   );
 
   if (error) return <>Error</>;
-  if (isLoading || !data) return <>Loading</>;
 
   return (
-    <Box>
+    <Box className="imageBody">
       <Slider {...settings} adaptiveHeight={false} variableWidth={false}>
-        {data?.body.map((item, index) => (
-          <Image src={item.backup_saved_url} key={index} />
-        ))}
+        {isLoading || !data ? (
+          <Skeleton>
+            <Box className="imageSliderSkeleton" />
+          </Skeleton>
+        ) : (
+          data?.body.map((item, index) => (
+            <Image src={item.backup_saved_url} key={index} />
+          ))
+        )}
       </Slider>
     </Box>
   );

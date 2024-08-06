@@ -32,7 +32,7 @@ export const SearchRequestFormatter = (queries: {
   inputs.limit = Number(queries.limit) || 20;
   inputs.offset = Number(queries.offset || "0") || 0;
   inputs.authorId = queries.authorId || null;
-  inputs.aiMode = Number(queries.aiMode) || 2;
+  inputs.aiMode = Number(queries.aiMode);
   inputs.view = String(queries.view) === "nouns" ? "nouns" : "tags";
 
   if (

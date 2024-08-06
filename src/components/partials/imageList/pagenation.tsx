@@ -18,7 +18,9 @@ export const PagingWrapper: FC = () => {
   const [currentPage, setCurrentPage] = useState<number | null>(null);
   const params = useSearchParams();
   const { data, error, isLoading } = useSWR<MetaImageResult>(
-    tag && noun ? `/meta/images?tags=${tag}&nouns=${noun}` : null,
+    tag && noun
+      ? `/meta/images?tags=${tag}&nouns=${noun}&aiMode=${params.get("aiMode")}`
+      : null,
     fetcher
   );
   const {
@@ -29,7 +31,9 @@ export const PagingWrapper: FC = () => {
     tag && noun && currentPage
       ? `/search/images?sort=${
           params.get("sort") || "created_at,desc"
-        }&tags=${tag}&nouns=${noun}&limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}&offset=${
+        }&aiMode=${params.get(
+          "aiMode"
+        )}&tags=${tag}&nouns=${noun}&limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}&offset=${
           (Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE
         }`
       : null,

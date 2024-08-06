@@ -28,11 +28,14 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
   _noun,
 }) => {
   const router = useRouter();
+  const params = useSearchParams();
   const { tag, noun } = router.query;
 
   const getKey = (pageIndex: number) => {
     return tag && noun
-      ? `/tags/explore?tags=${tag}&nouns=${noun}&limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}&offset=${
+      ? `/tags/explore?tags=${tag}&nouns=${noun}&aiMode=${params.get(
+          "aiMode"
+        )}&limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}&offset=${
           pageIndex * GLOBAL_TAGS_NUMBERS_PER_PAGE
         }&view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`
       : null;
@@ -96,19 +99,14 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
             const path = newPath(item.tag);
             const exists = isExists(item.tag);
             return (
-              <Link href={path} key={item.tag} passHref>
-                <RLink>
-                  <Tag
-                    colorScheme="blue"
-                    variant={exists ? "solid" : "outline"}
-                  >
-                    <TagLabel>
-                      {item.tag}({item.num})
-                    </TagLabel>
-                    <TagRightIcon as={exists ? SmallCloseIcon : SmallAddIcon} />
-                  </Tag>
-                </RLink>
-              </Link>
+              <RLink as={Link} href={path} key={item.tag}>
+                <Tag colorScheme="blue" variant={exists ? "solid" : "outline"}>
+                  <TagLabel>
+                    {item.tag}({item.num})
+                  </TagLabel>
+                  <TagRightIcon as={exists ? SmallCloseIcon : SmallAddIcon} />
+                </Tag>
+              </RLink>
             );
           })}
       </HStack>

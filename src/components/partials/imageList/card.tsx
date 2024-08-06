@@ -171,34 +171,24 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
           sx={{ marginTop: "8px", width: "100%" }}
         >
           <Button
-            as={"a"}
+            as={Link}
             target="_blank"
             href={originalURL}
             variant="outline"
             colorScheme="facebook"
-            sx={{ width: "33%", borderTopLeftRadius: 0 }}
+            sx={{ borderTopLeftRadius: 0, width: "50%" }}
           >
             ソース
           </Button>
           <Button
             isDisabled={unavailable}
             href={href}
-            as={"a"}
+            as={Link}
             variant="solid"
             colorScheme="facebook"
-            sx={{ width: "33%" }}
+            sx={{ borderTopRightRadius: 0, width: "50%" }}
           >
             詳細
-          </Button>
-          <Button
-            as="a"
-            isDisabled={unavailable}
-            href={`/similarTo/${props.id}`}
-            variant="outline"
-            colorScheme="facebook"
-            sx={{ width: "34%", borderTopRightRadius: 0 }}
-          >
-            類似
           </Button>
         </ButtonGroup>
       </CardFooter>
