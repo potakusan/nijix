@@ -1,5 +1,5 @@
 import { IndivisualImageRequestFormatter } from "@/backend/requests/indivisualImageRequest";
-import { IndivisualRelatedIllustAPI } from "@/backend/sql/image/related";
+import { IndividualRelatedIllustAPI } from "@/backend/sql/image/related";
 import {
   checkHTTPRequests,
   makeError,
@@ -17,7 +17,7 @@ export default async function handler(
   if (!isValidReuest) {
     return res.status(403).json(makeError(requestErrorMessage, 0));
   }
-  const i = await new IndivisualRelatedIllustAPI().connect();
+  const i = await new IndividualRelatedIllustAPI().connect();
 
   const { success, inputs } = IndivisualImageRequestFormatter(
     req.query as CommonQueries

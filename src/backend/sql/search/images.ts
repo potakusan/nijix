@@ -1,6 +1,7 @@
 import { ImageResultSet } from "@/types/api/search/images";
-import SQLFuncWrapper from "../../../../_sql";
 import { ConditionInputs } from "@/types/api/meta/images";
+import SQLFuncWrapper from "..";
+import dayjs from "dayjs";
 
 export class IllustAPI extends SQLFuncWrapper {
   async execMethod() {
@@ -54,27 +55,6 @@ export class IllustAPI extends SQLFuncWrapper {
     "JOIN authors ON t.author_id = authors.author_id",
     "JOIN images ON t.id = images.id AND images.increment = 1",
   ];
-  protected cols: string[] = [
-    "t.id",
-    "t.text",
-    "t.created_at",
-    "t.added_at",
-    "t.text_lower",
-    "t.has_images",
-    "t.ai",
-    "images.media_key",
-    "images.url",
-    "images.type",
-    "images.status",
-    "images.backup_saved_url",
-    "images.px_thumb",
-    "authors.author_id",
-    "authors.username",
-    "authors.description",
-    "authors.profile_image_url",
-    "authors.updated_at",
-    "authors.source",
-  ];
 
   joinWhereConditions = () =>
     this.wheres.length > 0 ? " WHERE " + this.wheres.join(" AND ") : "";
@@ -93,6 +73,14 @@ export class IllustAPI extends SQLFuncWrapper {
       this.joins = this.joins.concat(input.joins);
     }
   };
+
+  setRandOffset() {
+    const rand = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
+    const untilDate = dayjs().subtract(rand(0, 400), "day");
+    this.sinceDate = untilDate.subtract(1, "y").format("YYYY-MM-DD");
+    this.untilDate = untilDate.format("YYYY-MM-DD");
+  }
 
   protected mkCommons() {
     this.mkCondArtist();

@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "@/_frontend/fetch";
 import { IndivisualIllustType } from "@/types/api/image";
+import { FC } from "react";
 
 const settings = {
   dots: true,
@@ -13,7 +14,7 @@ const settings = {
   slidesPerRow: 1,
 };
 
-export default function Carousel() {
+const Carousel: FC<{ setError: (input: boolean) => void }> = ({ setError }) => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<IndivisualIllustType>(
@@ -22,6 +23,10 @@ export default function Carousel() {
   );
 
   if (error) return <>Error</>;
+  if (!isLoading && data && data.body.length === 0) {
+    setError(true);
+    return null;
+  }
 
   return (
     <Box className="imageBody">
@@ -38,4 +43,6 @@ export default function Carousel() {
       </Slider>
     </Box>
   );
-}
+};
+
+export default Carousel;

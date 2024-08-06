@@ -20,6 +20,7 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
+import Link from "next/link";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -57,7 +58,7 @@ export default function WithSubnavigation() {
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
           >
-            NijiX
+            <Link href="/">NijiX</Link>
           </Text>
         </Flex>
 

@@ -27,6 +27,9 @@ export default function SDTagsBox() {
   );
   if (error) return <>Error</>;
   if (isLoading || !data) return <SkeletonSDTagsBox />;
+  if (!isLoading && (!data || data.body.tags.length === 0)) {
+    return null;
+  }
   const toPercentage = (number: number) => Number(number.toFixed(4)) * 100;
 
   const ratings = [

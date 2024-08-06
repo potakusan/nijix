@@ -14,13 +14,16 @@ import { fetcher } from "@/_frontend/fetch";
 import { TagsResultType } from "@/types/api/image/tags";
 import Link from "next/link";
 
-export default function TagsBox() {
+const TagsBox = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<TagsResultType>(
     id ? `/image/tags?id=${id}` : null,
     fetcher
   );
+  if (!isLoading && (!data || data.body.tags.length === 0)) {
+    return null;
+  }
   return (
     <Box mt={4}>
       <Card>
@@ -28,7 +31,7 @@ export default function TagsBox() {
           <Heading size="md">Tags</Heading>
         </CardHeader>
         <CardBody pt={2}>
-          {isLoading && <SkeletonTagsBox />}
+          {(isLoading || !data) && <SkeletonTagsBox />}
           {!isLoading && data && (
             <HStack flexWrap={"wrap"} spacing={1}>
               {data?.body.tags.map((item) => {
@@ -56,7 +59,7 @@ export default function TagsBox() {
       </Card>
     </Box>
   );
-}
+};
 
 const SkeletonTagsBox = () =>
   [...new Array(8)].map((_, i) => {
@@ -68,3 +71,5 @@ const SkeletonTagsBox = () =>
       </Skeleton>
     );
   });
+
+export default TagsBox;

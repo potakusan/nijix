@@ -1,8 +1,8 @@
 import { ImageResultSet, TagStringSet } from "@/types/api/search/images";
-import { IndivisualIllustAPI } from ".";
+import { IndividualIllustAPI } from ".";
 import { TagWithIdResultSet } from "@/types/api/tags/explore";
 
-export class IndivisualRelatedIllustAPI extends IndivisualIllustAPI {
+export class IndividualRelatedIllustAPI extends IndividualIllustAPI {
   intersections = (arrays: string[][]) => {
     return arrays.reduce((a, b) => a.filter((c) => b.includes(c)));
   };
@@ -54,9 +54,7 @@ export class IndivisualRelatedIllustAPI extends IndivisualIllustAPI {
     if (!this.con) return {};
 
     const query = `SELECT 
-    t.id,t.text,t.created_at,t.added_at,t.text_lower,t.has_images,t.ai,
-    images.media_key,images.url,images.type,images.status,images.backup_saved_url,images.px_thumb,
-    authors.author_id,authors.username,authors.description,authors.profile_image_url,authors.updated_at,authors.source
+    ${this.cols.join(",")}
     FROM tweets AS t
     JOIN images ON t.id = images.id AND images.increment = 1
     JOIN authors ON t.author_id = authors.author_id

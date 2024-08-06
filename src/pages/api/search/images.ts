@@ -49,6 +49,10 @@ export default async function handler(
   i.setSort(inputs.sort, inputs.seed);
   i.setAiMode(inputs.aiMode);
 
+  if (inputs.sort === "top") {
+    i.setRandOffset();
+  }
+
   const response = await i.execMethod();
   i.destroy();
   if (response) {

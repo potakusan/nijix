@@ -11,31 +11,42 @@ import { ImageList } from "./list";
 import { SearchImageResult } from "@/types/api/search/images";
 import { GLOBAL_ITEM_NUMBERS_PER_PAGE } from "../../../../_config/config";
 import { useSearchParams } from "next/navigation";
+import { queryGenerator } from "@/_frontend/queryGenerator";
+import { Box } from "@chakra-ui/react";
 
-export const PagingWrapper: FC = () => {
+export const PagingWrapper: FC<{ artist?: string }> = ({ artist }) => {
   const router = useRouter();
   const { tag, noun } = router.query;
   const [currentPage, setCurrentPage] = useState<number | null>(null);
   const params = useSearchParams();
+  const qs = [
+    `tags=${tag || "_"}`,
+    `nouns=${noun || "_"}`,
+    `aiMode=${params.get("aiMode")}`,
+  ];
+  if (artist) qs.push(`authorId=${artist}`);
   const { data, error, isLoading } = useSWR<MetaImageResult>(
-    tag && noun
-      ? `/meta/images?tags=${tag}&nouns=${noun}&aiMode=${params.get("aiMode")}`
-      : null,
+    (tag && noun) || artist ? `/meta/images?${queryGenerator(qs)}` : null,
     fetcher
   );
+
+  const qt = [
+    `sort=${params.get("sort") || "created_at,desc"}`,
+    `aiMode=${params.get("aiMode")}`,
+    `tags=${tag || ""}`,
+    `nouns=${noun || ""}`,
+    `limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
+    `offset=${(Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
+  ];
+  if (artist) qt.push(`authorId=${artist}`);
+
   const {
     data: listBody,
     error: listError,
     isLoading: listLoading,
   } = useSWR<SearchImageResult>(
-    tag && noun && currentPage
-      ? `/search/images?sort=${
-          params.get("sort") || "created_at,desc"
-        }&aiMode=${params.get(
-          "aiMode"
-        )}&tags=${tag}&nouns=${noun}&limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}&offset=${
-          (Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE
-        }`
+    (tag && noun && currentPage) || artist
+      ? `/search/images?${queryGenerator(qt)}`
       : null,
     fetcher
   );
@@ -50,6 +61,7 @@ export const PagingWrapper: FC = () => {
     <>
       {!error && !isLoading && data && (
         <PagingComponent
+          artist={artist}
           currentPage={currentPage || 1}
           setCurrentPage={setCurrentPage}
           data={data}
@@ -78,12 +90,20 @@ const PagingComponent: FC<{
   currentPage: number;
   setCurrentPage: (e: number) => void;
   listLoading: boolean;
-}> = ({ data, currentPage, setCurrentPage, listLoading }) => {
+  artist?: string;
+}> = ({ data, currentPage, setCurrentPage, listLoading, artist }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pages = Math.ceil(
     (data?.body || GLOBAL_ITEM_NUMBERS_PER_PAGE) / GLOBAL_ITEM_NUMBERS_PER_PAGE
   );
+  if (!listLoading && data.body === 0) {
+    return (
+      <Box sx={{ padding: "20px" }}>
+        <div style={{ height: "38px" }}>&nbsp;</div>
+      </Box>
+    );
+  }
   return (
     <div
       style={{
@@ -103,7 +123,9 @@ const PagingComponent: FC<{
         onPageChange={(page) => {
           if (listLoading) return;
           router.push(
-            `/search/${router.query.tag}/${router.query.noun}/${String(
+            `/${artist ? `artist/${artist}` : `search`}/${
+              router.query.tag || "_"
+            }/${router.query.noun || "_"}/${String(
               page
             )}?${searchParams.toString()}`
           );

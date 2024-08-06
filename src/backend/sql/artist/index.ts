@@ -1,5 +1,5 @@
-import SQLFuncWrapper from "../../../../_sql";
 import { ArtistMetaResultSet } from "@/types/api/artist";
+import SQLFuncWrapper from "..";
 
 export class IndivisualArtistAPI extends SQLFuncWrapper {
   private id: string | null = null;

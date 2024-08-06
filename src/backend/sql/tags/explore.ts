@@ -1,5 +1,5 @@
 import { TagExplorerResultSet } from "@/types/api/tags/explore";
-import SQLFuncWrapper from "../../../../_sql";
+import SQLFuncWrapper from "..";
 
 export class TagExplorer extends SQLFuncWrapper {
   async get() {

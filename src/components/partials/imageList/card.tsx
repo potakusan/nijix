@@ -28,7 +28,7 @@ import { FC, useState } from "react";
 export const ImageCardSkeleton = () => (
   <Card sx={{ width: "100%", maxWidth: "400px" }}>
     <CardBody sx={{ paddingBottom: "4px" }}>
-      <Skeleton height="500px" />
+      <Skeleton height="300px" />
       <Stack mt="6" spacing="3">
         <Heading size="md">
           <Skeleton>&nbsp;</Skeleton>
@@ -64,7 +64,7 @@ export const ImageCardSkeleton = () => (
 );
 
 export const ImageCard: FC<ImageResultSet> = (props) => {
-  const maxLen = 14;
+  const maxLen = 10;
   const { croppedText, withoutURL } = textConverts(props.text, {
     maxLength: maxLen,
     removeURL: true,
@@ -99,7 +99,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
                 }
               }}
               width={"100%"}
-              height={500}
+              height={300}
               src={props.px_thumb || props.url}
               alt={props.text}
               borderRadius="lg"
@@ -113,7 +113,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
               alignItems="center"
               justifyContent="center"
               textAlign="center"
-              height="500"
+              height="300"
             >
               <AlertIcon boxSize="40px" mr={0} />
               <AlertTitle mt={4} mb={1} fontSize="lg">
@@ -148,9 +148,11 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
         </Link>
         <Stack mt="6" spacing="3">
           <Heading size="md">
-            <Link href={`/artist/` + props.author_id}>{props.username}</Link>
+            <Link href={`/artist/` + props.author_id + `/_/_/1`}>
+              {props.username}
+            </Link>
           </Heading>
-          <Text>
+          <Text fontSize="xs">
             {!showAll ? croppedText : withoutURL}
             {!showAll && (
               <RLink
@@ -158,7 +160,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
                 style={{ textDecoration: "underline", marginLeft: "5px" }}
                 color="teal.500"
               >
-                全て表示
+                表示
               </RLink>
             )}
           </Text>

@@ -1,9 +1,9 @@
 import { ImageResultSet } from "@/types/api/search/images";
-import SQLFuncWrapper from "../../../../_sql";
 import { SDRatingsType, SDTagsType } from "@/types/api/image/sd";
 import { RawTagsType } from "@/types/api/image/tags";
+import SQLFuncWrapper from "..";
 
-export class IndivisualIllustAPI extends SQLFuncWrapper {
+export class IndividualIllustAPI extends SQLFuncWrapper {
   protected id: string | null = null;
   setId(input: string) {
     this.id = input;

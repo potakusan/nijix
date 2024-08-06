@@ -22,22 +22,29 @@ import { generateNewPath } from "@/_frontend/generateNewPath";
 import { useSearchParams } from "next/navigation";
 import useSWRInfinite from "swr/infinite";
 import Link from "next/link";
+import { queryGenerator } from "@/_frontend/queryGenerator";
 
-export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
-  _tag,
-  _noun,
-}) => {
+export const TagExplorer: FC<{
+  _tag?: boolean;
+  _noun?: boolean;
+  artist?: string;
+}> = ({ _tag, _noun, artist }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
 
   const getKey = (pageIndex: number) => {
-    return tag && noun
-      ? `/tags/explore?tags=${tag}&nouns=${noun}&aiMode=${params.get(
-          "aiMode"
-        )}&limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}&offset=${
-          pageIndex * GLOBAL_TAGS_NUMBERS_PER_PAGE
-        }&view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`
+    const qs = [
+      `tags=${tag || "_"}`,
+      `nouns=${noun || "_"}`,
+      `aiMode=${params.get("aiMode")}`,
+      `limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
+      `offset=${pageIndex * GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
+      `view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`,
+    ];
+    if (artist) qs.push(`authorId=${artist}`);
+    return (tag && noun) || artist
+      ? `/tags/explore?${queryGenerator(qs)}`
       : null;
   };
 
@@ -56,10 +63,11 @@ export const TagExplorer: FC<{ _tag?: boolean; _noun?: boolean }> = ({
   const newPath = (newTag: string) =>
     generateNewPath(
       searchParams,
-      tag as string,
-      noun as string,
+      (tag as string) || "_",
+      (noun as string) || "_",
       _tag ? newTag : null,
-      _noun ? newTag : null
+      _noun ? newTag : null,
+      artist
     );
   const isExists = (current: string) => {
     if (_tag) {

@@ -2,8 +2,9 @@ import { Box, Button, ButtonGroup, Heading } from "@chakra-ui/react";
 import Link from "next/link";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { FC } from "react";
 
-export const AIChoice = () => {
+export const AIChoice: FC<{ artist?: string }> = ({ artist }) => {
   const router = useRouter();
   const params = useSearchParams();
   const current = params.has("aiMode") ? Number(params.get("aiMode")) : 2;
@@ -26,16 +27,29 @@ export const AIChoice = () => {
       <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
         AIフィルター
       </Heading>
-      <ButtonGroup size="sm" isAttached variant="outline">
-        {buttons.map((item) => (
+      <ButtonGroup
+        isAttached
+        size="sm"
+        variant="outline"
+        flexDirection={"column"}
+        w="100%"
+      >
+        {buttons.map((item, i) => (
           <Button
+            w="100%"
             href={
-              `/search/${router.query.tag}/${router.query.noun}/${router.query.page}` +
+              `/${artist ? `/artist/${artist}` : `search`}/${
+                router.query.tag
+              }/${router.query.noun}/${router.query.page}` +
               getUpdatedSearchParams(params, {
                 key: "aiMode",
                 value: item.value,
               })
             }
+            sx={{
+              borderRadius: 0,
+              borderBottomWidth: i === buttons.length - 1 ? "1px" : 0,
+            }}
             as={Link}
             key={item.value}
             colorScheme="teal"

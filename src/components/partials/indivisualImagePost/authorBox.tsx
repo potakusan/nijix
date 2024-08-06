@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Card,
   CardBody,
   Divider,
@@ -27,46 +28,47 @@ export default function ArtistBox() {
 
   if (error) return <>Error</>;
   if (isLoading || !data) return <SkeletonArtistBox />;
-
+  if (!isLoading && (!data || data.body.length === 0)) {
+    return null;
+  }
   return (
     <Box>
       <Card>
         <CardBody>
           <Box>
-            <Heading size="md">
+            <Heading size="md" sx={{ display: "flex", alignItems: "center" }}>
               <Link
                 as={NextLink}
-                href={`/artist/${data.body[0].author_id}`}
+                href={`/artist/${data.body[0].author_id}/_/_/1`}
                 color="teal"
               >
                 {data.body[0].source === "twitter" ? "@" : ""}
                 {data.body[0].username}
               </Link>
-            </Heading>
-            <NextLink
-              passHref
-              target="_blank"
-              rel="noopener noreferrer"
-              href={generateOriginalUrl(
-                false,
-                id as string,
-                data.body[0].source,
-                data.body[0].author_id
-              )}
-            >
-              <Tag
-                size={"small"}
-                variant="solid"
-                colorScheme="teal"
-                mt={2}
-                p={1}
+              <NextLink
+                passHref
+                target="_blank"
+                rel="noopener noreferrer"
+                href={generateOriginalUrl(
+                  false,
+                  id as string,
+                  data.body[0].source,
+                  data.body[0].author_id
+                )}
               >
-                Image Source:
-                {data.body[0].source === "twitter"
-                  ? "X(Twitter)"
-                  : data.body[0].source}
-              </Tag>
-            </NextLink>
+                <Button
+                  size={"small"}
+                  variant="outline"
+                  colorScheme="teal"
+                  fontSize="10"
+                  ml={2}
+                  p={1}
+                  px={3}
+                >
+                  Source
+                </Button>
+              </NextLink>
+            </Heading>
           </Box>
           <Divider m={4} />
           <Box mt={4} display="block" className="authorImages">
@@ -115,6 +117,17 @@ export default function ArtistBox() {
               })}
             </Slider>
           </Box>
+          <NextLink href={"/artist/" + data.body[0].author_id + "/_/_/1"}>
+            <Button
+              variant="solid"
+              colorScheme="teal"
+              width={"100%"}
+              mt={2}
+              p={1}
+            >
+              See all images
+            </Button>
+          </NextLink>
         </CardBody>
       </Card>
     </Box>
@@ -129,14 +142,22 @@ const SkeletonArtistBox = () => (
           <Heading size="md">
             <Skeleton>&nbsp;</Skeleton>
           </Heading>
-          <Skeleton w={"45px"} mt={2}>
-            <Tag size={"small"} variant="solid" colorScheme="teal" p={1}></Tag>
-          </Skeleton>
         </Box>
         <Divider m={4} />
         <Box mt={4} display="block" className="authorImages">
-          <Skeleton w={"100%"} h="186px" />
+          <Skeleton w={"100%"} h="156px" />
         </Box>
+        <Skeleton>
+          <Button
+            variant="solid"
+            colorScheme="teal"
+            width={"100%"}
+            mt={2}
+            p={1}
+          >
+            See all images
+          </Button>
+        </Skeleton>
       </CardBody>
     </Card>
   </Box>

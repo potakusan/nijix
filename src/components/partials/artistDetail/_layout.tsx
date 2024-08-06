@@ -8,36 +8,37 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import Carousel from "./slider";
-import ArtistBox from "./authorBox";
-import SDTagsBox from "./sdTagsBox";
-import TagsBox from "./tagsBox";
-import RelatedImages from "./related";
 import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { TopSlider } from "@/pages";
+import { useRouter } from "next/router";
+import { ConditionsSelector } from "../tagList/oneSelector";
+import { PagingWrapper } from "../imageList/pagenation";
+import { PageHead } from "@/pages/search/[tag]/[noun]/[page]";
 
-export const IndivisualImagePostLayout = () => {
+export const IndivisualArtistLayout = () => {
+  const router = useRouter();
   const [error, setError] = useState<boolean>(false);
+  const { id } = router.query;
   if (error) {
     return <Error />;
   }
   return (
-    <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
-      <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
-        <GridItem w="100%" colSpan={{ base: 12, sm: 12, md: 8, lg: 9 }}>
-          <Carousel setError={setError} />
-          <RelatedImages />
-        </GridItem>
-        <GridItem w="100%" colSpan={{ base: 12, sm: 12, md: 4, lg: 3 }}>
-          <ArtistBox />
-          <TagsBox />
-          <SDTagsBox />
-        </GridItem>
-      </Grid>
-      <Divider my={4} />
-      <div className="clear" />
-    </Container>
+    <>
+      <PageHead>test</PageHead>
+      <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+        <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
+          <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
+            <ConditionsSelector artist={id as string} />
+          </GridItem>
+          <GridItem colSpan={{ base: 12, sm: 12, md: 9, lg: 10 }}>
+            <PagingWrapper artist={id as string} />
+          </GridItem>
+        </Grid>
+        <Divider my={4} />
+        <div className="clear" />
+      </Container>
+    </>
   );
 };
 

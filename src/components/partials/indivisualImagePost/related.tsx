@@ -1,11 +1,4 @@
-import {
-  Skeleton,
-  Image,
-  Card,
-  Box,
-  Heading,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Skeleton, Image, Card, Box, Heading } from "@chakra-ui/react";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "@/_frontend/fetch";
@@ -21,6 +14,9 @@ export default function RelatedImages() {
     fetcher
   );
   if (error) return <>Error</>;
+  if (!isLoading && (!data || data.body.length === 0)) {
+    return null;
+  }
   return (
     <Box mt="6">
       <Heading size={"md"} m={"4"} color="teal">

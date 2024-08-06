@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { db_setting } from "../_config/config";
+import { db_setting } from "../../../_config/config";
 
 class SQLFunc {
   con: mysql.Connection | null = null;
@@ -87,6 +87,28 @@ class SQLFunc {
 }
 
 export default class SQLFuncWrapper extends SQLFunc {
+  protected cols: string[] = [
+    "t.id",
+    "t.text",
+    "t.created_at",
+    "t.added_at",
+    "t.text_lower",
+    "t.has_images",
+    "t.ai",
+    "images.media_key",
+    "images.url",
+    "images.type",
+    "images.status",
+    "images.backup_saved_url",
+    "images.px_thumb",
+    "authors.author_id",
+    "authors.username",
+    "authors.description",
+    "authors.profile_image_url",
+    "authors.updated_at",
+    "authors.source",
+  ];
+
   protected tags: string[] = [];
   protected nouns: string[] = [];
 
