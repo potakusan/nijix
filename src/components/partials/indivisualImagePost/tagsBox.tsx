@@ -33,7 +33,7 @@ export default function TagsBox() {
             <HStack flexWrap={"wrap"} spacing={1}>
               {data?.body.tags.map((item) => {
                 return (
-                  <Link href={`/search/${item.tag}/_/1`}>
+                  <Link key={item.tag} href={`/search/${item.tag}/_/1`}>
                     <Tag key={item.tag} variant="solid" colorScheme="facebook">
                       {item.tag}({item.count})
                     </Tag>
@@ -42,7 +42,7 @@ export default function TagsBox() {
               })}
               {data?.body.nouns.map((item) => {
                 return (
-                  <Link href={`/search/_/${item.tag}/1`}>
+                  <Link key={item.tag} href={`/search/_/${item.tag}/1`}>
                     <Tag key={item.tag} variant="solid" colorScheme="teal">
                       {item.tag}({item.count})
                     </Tag>
@@ -61,8 +61,8 @@ export default function TagsBox() {
 const SkeletonTagsBox = () =>
   [...new Array(8)].map((_, i) => {
     return (
-      <Skeleton>
-        <Tag key={i} variant="solid" colorScheme="teal">
+      <Skeleton key={i}>
+        <Tag variant="solid" colorScheme="teal">
           &nbsp;
         </Tag>
       </Skeleton>

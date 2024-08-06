@@ -34,12 +34,14 @@ export default function ArtistBox() {
         <CardBody>
           <Box>
             <Heading size="md">
-              <NextLink passHref href={`/artist/${data.body[0].author_id}`}>
-                <Link color="teal">
-                  {data.body[0].source === "twitter" ? "@" : ""}
-                  {data.body[0].username}
-                </Link>
-              </NextLink>
+              <Link
+                as={NextLink}
+                href={`/artist/${data.body[0].author_id}`}
+                color="teal"
+              >
+                {data.body[0].source === "twitter" ? "@" : ""}
+                {data.body[0].username}
+              </Link>
             </Heading>
             <NextLink
               passHref

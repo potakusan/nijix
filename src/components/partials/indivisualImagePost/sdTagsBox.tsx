@@ -78,7 +78,7 @@ export default function SDTagsBox() {
                   .map((item) => {
                     const p = toPercentage(item.point);
                     return (
-                      <Fragment key={item.key}>
+                      <Fragment key={item.title}>
                         <Heading size="xs">
                           {item.title}: {p.toFixed(2)}%
                         </Heading>
