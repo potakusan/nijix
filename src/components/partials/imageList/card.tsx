@@ -22,9 +22,11 @@ import {
   Tag,
   TagLeftIcon,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FC, useState } from "react";
+import { TagSelectFromImage } from "../tagList/fromImage";
 
 export const ImageCardSkeleton = () => (
   <Card sx={{ width: "100%", maxWidth: "400px" }}>
@@ -70,6 +72,9 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
     maxLength: maxLen,
     removeURL: true,
   });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [unavailable, setUnavailable] = useState<boolean>(false);
   const [showAll, setShowAll] = useState<boolean>(withoutURL.length < maxLen);
   const href = unavailable ? "#" : `/image/${props.id}`;
@@ -203,6 +208,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             fontSize="md"
           >
             <Button
+              onClick={onOpen}
               isDisabled={unavailable}
               variant="solid"
               colorScheme="facebook"
@@ -217,6 +223,9 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             </Button>
           </Tooltip>
         </ButtonGroup>
+        {isOpen && (
+          <TagSelectFromImage isOpen={isOpen} onClose={onClose} id={props.id} />
+        )}
       </CardFooter>
     </Card>
   );

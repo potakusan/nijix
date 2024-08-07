@@ -93,7 +93,7 @@ export const TagExplorer: FC<{
         <Text>Fetch Error</Text>
       </>
     );
-  if (!data) return <SkeletonCloud _tag={_tag} _noun={_noun} />;
+  if (!data) return <SkeletonTagCloud _tag={_tag} _noun={_noun} />;
   return (
     <>
       <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
@@ -154,19 +154,22 @@ export const TagExplorer: FC<{
   );
 };
 
-const SkeletonCloud: FC<{ _tag?: boolean; _noun?: boolean }> = ({
-  _tag,
-  _noun,
-}) => {
+export const SkeletonTagCloud: FC<{
+  _tag?: boolean;
+  _noun?: boolean;
+  withHeader?: boolean;
+}> = ({ _tag, _noun, withHeader = true }) => {
   const rand = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1) + min);
 
   return (
     <>
-      <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
-        {_tag && "タグ"}
-        {_noun && "特徴"}
-      </Heading>
+      {withHeader && (
+        <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
+          {_tag && "タグ"}
+          {_noun && "特徴"}
+        </Heading>
+      )}
       <HStack spacing={1} wrap={"wrap"}>
         {[...new Array(GLOBAL_TAGS_NUMBERS_PER_PAGE)].map((_item, i) => {
           return (

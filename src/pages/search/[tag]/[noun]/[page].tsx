@@ -54,7 +54,7 @@ export default function SearchByTagAndNouns() {
                     >
                       {item}
                     </Link>
-                    {i !== fil(tag as string).length - 1 && <>-</>}
+                    {i !== fil(tag as string).length - 1 && <>・</>}
                   </>
                 );
               })}
@@ -72,7 +72,7 @@ export default function SearchByTagAndNouns() {
                     >
                       {item}
                     </Link>
-                    {i !== fil(noun as string).length - 1 && <>-</>}
+                    {i !== fil(noun as string).length - 1 && <>・</>}
                   </>
                 );
               })}
