@@ -1,25 +1,24 @@
-import { IllustAPI } from "@/backend/sql/search/images";
+// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import type { NextApiRequest, NextApiResponse } from "next";
 import {
   checkHTTPRequests,
   makeError,
   makeSuccess,
 } from "@/backend/validator/httpRequests";
-import { SearchImageResult } from "@/types/api/search/images";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { CommonQueries } from "@/types/api/common/inputs";
 import { SearchRequestFormatter } from "@/backend/requests/searchRequest";
+import { HParamsExplorer } from "@/backend/sql/hparams/explore";
+import { HParamExplorerResult } from "@/types/api/hparams";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<SearchImageResult>
+  res: NextApiResponse<HParamExplorerResult>
 ) {
   const { isValidReuest, requestErrorMessage } = checkHTTPRequests(req, "get");
   if (!isValidReuest) {
-    return res
-      .status(403)
-      .json({ error: true, errorMessage: requestErrorMessage, body: [] });
+    return res.status(403).json(makeError(requestErrorMessage, []));
   }
-  const i = await new IllustAPI().connect();
+  const i = await new HParamsExplorer().connect();
 
   const { success, inputs } = SearchRequestFormatter(
     req.query as CommonQueries
@@ -40,20 +39,15 @@ export default async function handler(
     i.setNouns(inputs.nouns);
   }
 
+  i.setView(inputs.view);
   i.setOffset(inputs.offset);
   i.setLimit(inputs.limit);
   i.setAuthorId(inputs.authorId);
   i.setSinceDate(inputs.sinceDate);
   i.setUntilDate(inputs.untilDate);
-  i.setHParams(inputs.hParams);
-  i.setSort(inputs.sort, inputs.seed);
   i.setAiMode(inputs.aiMode);
 
-  if (inputs.sort === "top") {
-    i.setRandOffset();
-  }
-
-  const response = await i.execMethod();
+  const response = await i.get();
   i.destroy();
   if (response) {
     return res.status(200).json(makeSuccess(response));

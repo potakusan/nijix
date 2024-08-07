@@ -2,6 +2,7 @@ import { NextApiRequest } from "next";
 import { validateDates } from "../validator/search/illustDates";
 import { CommonSearchRequestInputs } from "@/types/api/common/inputs";
 import dayjs from "dayjs";
+import { HParams } from "@/types/api/search/images";
 
 export const SearchRequestFormatter = (queries: {
   [key: string]: string;
@@ -18,7 +19,7 @@ export const SearchRequestFormatter = (queries: {
     aiMode: 0,
     sinceDate: null,
     untilDate: null,
-    hParams: [0, 100],
+    hParams: null,
     seed: "",
     sort: "",
     view: "tags",
@@ -63,8 +64,23 @@ export const SearchRequestFormatter = (queries: {
   inputs.seed = queries.seed || "";
   inputs.sort = queries.sort || "created_at,desc";
 
-  const hparam = (queries.hParams || "0,100").split(",") || ["0", "100"];
-  inputs.hParams = [Number(hparam[0]), Number(hparam[1])];
+  inputs.hParams = validateHParams((queries.hparams || "").split(","));
 
   return { success: true, inputs: inputs };
+};
+
+export const validateHParams = (inputs: string[]): HParams[] | null => {
+  const acceptables: HParams[] = [
+    "general",
+    "sensitive",
+    "questionable",
+    "explicit",
+  ];
+  const res: HParams[] = [];
+  for (let i = 0; i < inputs.length; ++i) {
+    if (acceptables.indexOf(inputs[i] as HParams) > -1) {
+      res.push(inputs[i] as HParams);
+    }
+  }
+  return res.length > 0 ? res : null;
 };

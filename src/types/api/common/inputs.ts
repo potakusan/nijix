@@ -1,3 +1,5 @@
+import { HParams } from "../search/images";
+
 export interface CommonSearchRequestInputs {
   tags: string[] | null;
   nouns: string[] | null;
@@ -7,7 +9,7 @@ export interface CommonSearchRequestInputs {
   aiMode: number;
   sinceDate: string | null;
   untilDate: string | null;
-  hParams: [number, number];
+  hParams: HParams[] | null;
   sort: string;
   seed: string;
   view: "tags" | "nouns";

@@ -44,3 +44,5 @@ export interface ImageResultSet
 export interface TagStringSet extends RowDataPacket {
   tag: string[];
 }
+
+export type HParams = "general" | "sensitive" | "questionable" | "explicit";

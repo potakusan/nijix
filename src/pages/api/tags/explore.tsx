@@ -45,7 +45,7 @@ export default async function handler(
   i.setAuthorId(inputs.authorId);
   i.setSinceDate(inputs.sinceDate);
   i.setUntilDate(inputs.untilDate);
-  i.setHParams(inputs.hParams[0], inputs.hParams[1]);
+  i.setHParams(inputs.hParams);
   i.setAiMode(inputs.aiMode);
 
   const response = await i.get();

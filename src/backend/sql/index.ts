@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise";
 import { db_setting } from "../../../_config/config";
+import { HParams } from "@/types/api/search/images";
 
 class SQLFunc {
   con: mysql.Connection | null = null;
@@ -135,11 +136,18 @@ export default class SQLFuncWrapper extends SQLFunc {
   setSinceDate = (date: string | null) => (this.sinceDate = date);
   setUntilDate = (date: string | null) => (this.untilDate = date);
 
-  protected hparams: number[] = [0, 100];
+  protected hparams: HParams[] | null = null;
 
-  isHParamsChanged = () => this.hparams[0] !== 0 || this.hparams[1] !== 100;
+  isHParamsChanged = () =>
+    this.hparams !== null ||
+    !(
+      this.hparams &&
+      (["general", "sensitive", "questionable", "explicit"] as HParams[]).every(
+        (v) => (this.hparams as HParams[]).includes(v)
+      )
+    );
 
-  setHParams = (min: number, max: number) => (this.hparams = [min, max]);
+  setHParams = (inputs: HParams[] | null) => (this.hparams = inputs);
 
   protected aiMode: 0 | 1 | 2 = 2;
   setAiMode = (aimode = 2) => {

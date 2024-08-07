@@ -46,6 +46,7 @@ export class IllustAPI extends SQLFuncWrapper {
         //tagもnounsも複数
       }
     }
+    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
@@ -91,11 +92,42 @@ export class IllustAPI extends SQLFuncWrapper {
 
   protected mkCondHParams() {
     if (this.isHParamsChanged()) {
-      this.wheres.push(
-        `rates.explicit BETWEEN ${this.hparams[0] / 100} AND ${
-          this.hparams[1] / 100
-        }`
-      );
+      /*
+      [min,max]=
+      [0,25] : general
+      [0,50] : general,sensitive
+      [0,75] : general,sensitive,questionable
+      [0,100] : general,sensitive,questionable,explicit
+      [25,50] : sensitive
+      [25,75] : sensitive,questionable
+      [25,100] : sensitive,questionable,explicit
+      [50,75] : questionable
+      [50,100] : questionable,explicit
+      [75,100] : explicit
+
+      */
+      if (!this.hparams) return;
+      let conditions: string[] = [];
+      console.log(this.hparams);
+      const allColumns = [
+        "general",
+        "sensitive",
+        "questionable",
+        "explicit",
+      ] as const;
+
+      for (const column of allColumns) {
+        if (this.hparams.includes(column)) {
+          const others = allColumns.filter((c) => c !== column);
+          const condition = others
+            .map((other) => `rates.${column} >= rates.${other}`)
+            .join(" AND ");
+          conditions.push("(" + condition + ")");
+        }
+      }
+      if (conditions.length === 0) return;
+
+      this.wheres.push("(" + conditions.join(" OR ") + ")");
       this.joins.push("JOIN sd_ratings AS rates ON t.id = rates.id");
       this.cols = this.cols.concat([
         "rates.general",

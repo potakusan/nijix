@@ -41,7 +41,8 @@ export const TagExplorer: FC<{
     const qs = [
       `tags=${tag || "_"}`,
       `nouns=${noun || "_"}`,
-      `aiMode=${params.get("aiMode")}`,
+      `aiMode=${params.get("aiMode") || 2}`,
+      `hparams=${params.get("hparams") || ""}`,
       `limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
       `offset=${pageIndex * GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
       `view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`,
@@ -141,7 +142,7 @@ export const TagExplorer: FC<{
           <Text mt="3" fontSize="xs" as="p" textAlign={"right"}>
             <RLink
               as={Link}
-              href={`/search/${tag}/${noun}/1`}
+              href={`/search/${tag}/${noun}/1?${searchParams.toString()}`}
               display={"inline-block"}
             >
               全てのイラストを検索

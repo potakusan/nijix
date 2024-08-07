@@ -23,6 +23,7 @@ export const PagingWrapper: FC<{ artist?: string }> = ({ artist }) => {
     `tags=${tag || "_"}`,
     `nouns=${noun || "_"}`,
     `aiMode=${params.get("aiMode")}`,
+    `hparams=${params.get("hparams") || ""}`,
   ];
   if (artist) qs.push(`authorId=${artist}`);
   const { data, error, isLoading } = useSWR<MetaImageResult>(
@@ -36,6 +37,7 @@ export const PagingWrapper: FC<{ artist?: string }> = ({ artist }) => {
     `tags=${tag || ""}`,
     `nouns=${noun || ""}`,
     `limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
+    `hparams=${params.get("hparams") || ""}`,
     `offset=${(Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
   ];
   if (artist) qt.push(`authorId=${artist}`);

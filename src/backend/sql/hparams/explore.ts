@@ -1,7 +1,8 @@
 import { TagExplorerResultSet } from "@/types/api/tags/explore";
 import SQLFuncWrapper from "..";
+import { HParamExplorerResultSet } from "@/types/api/hparams";
 
-export class TagExplorer extends SQLFuncWrapper {
+export class HParamsExplorer extends SQLFuncWrapper {
   async get() {
     if (!this.con) return [];
 
@@ -13,30 +14,7 @@ export class TagExplorer extends SQLFuncWrapper {
     let conditions: string[] = [];
     let joins: string[] = ["FROM images i"];
 
-    // SD ratings condition
-    if (this.isHParamsChanged() && this.hparams) {
-      const hparamsCond = [];
-      const allColumns = [
-        "general",
-        "sensitive",
-        "questionable",
-        "explicit",
-      ] as const;
-
-      for (const column of allColumns) {
-        if (this.hparams.includes(column)) {
-          const others = allColumns.filter((c) => c !== column);
-          const condition = others
-            .map((other) => `sr.${column} >= sr.${other}`)
-            .join(" AND ");
-          hparamsCond.push("(" + condition + ")");
-        }
-      }
-      if (hparamsCond.length > 0) {
-        joins.push("JOIN sd_ratings sr ON i.id = sr.id");
-        conditions.push("(" + hparamsCond.join(" OR ") + ")");
-      }
-    }
+    joins.push("JOIN sd_ratings sr ON i.id = sr.id");
     // Author and date conditions
     const needsTweetsJoin =
       this.authorId !== null ||
@@ -88,20 +66,27 @@ export class TagExplorer extends SQLFuncWrapper {
 
     const query = `
       WITH filtered_images AS (
-        SELECT DISTINCT i.id
+        SELECT DISTINCT i.id,sr.general,sr.sensitive,sr.questionable,sr.explicit
         ${joins.join(" ")}
         ${whereClause}
       )
-      SELECT COUNT(*) AS num, t.tag
+      SELECT
+        SUM(CASE WHEN fi.general > fi.sensitive AND fi.general > fi.questionable AND fi.general > fi.explicit THEN 1 ELSE 0 END) AS generalCount,
+        SUM(CASE WHEN fi.sensitive > fi.general AND fi.sensitive > fi.questionable AND fi.sensitive > fi.explicit THEN 1 ELSE 0 END) AS sensitiveCount,
+        SUM(CASE WHEN fi.questionable > fi.general AND fi.questionable > fi.sensitive AND fi.questionable > explicit THEN 1 ELSE 0 END) AS questionableCount,
+        SUM(CASE WHEN fi.explicit > fi.general AND fi.explicit > fi.sensitive AND fi.explicit > fi.questionable THEN 1 ELSE 0 END) AS explicitCount
       FROM filtered_images fi
-      JOIN ${this.view === "tags" ? "tags" : "noun_tags"} t ON fi.id = t.id
-      GROUP BY t.tag
-      ORDER BY num DESC
-      LIMIT ${Number(this.limit)} OFFSET ${Number(this.offset)}
     `;
-    const [rows, _fields] = await this.con.execute<TagExplorerResultSet[]>(
+    const [rows, _fields] = await this.con.execute<HParamExplorerResultSet[]>(
       query
     );
-    return rows;
+    return rows.length > 0
+      ? rows[0]
+      : {
+          generalCount: 0,
+          sensitiveCount: 0,
+          questionableCount: 0,
+          explicitCount: 0,
+        };
   }
 }
