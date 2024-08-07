@@ -7,10 +7,11 @@ import {
   Grid,
   GridItem,
   Heading,
-  Link,
+  Link as RLink,
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -46,14 +47,15 @@ export default function SearchByTagAndNouns() {
                 const path = pathGenerator("tag", item);
                 return (
                   <>
-                    <Link
+                    <RLink
+                      as={Link}
                       key={item}
                       href={path}
                       color="blue.200"
                       textDecoration={"underline"}
                     >
                       {item}
-                    </Link>
+                    </RLink>
                     {i !== fil(tag as string).length - 1 && <>・</>}
                   </>
                 );
@@ -64,14 +66,15 @@ export default function SearchByTagAndNouns() {
                 const path = pathGenerator("noun", item);
                 return (
                   <>
-                    <Link
+                    <RLink
+                      as={Link}
                       key={item}
                       href={path}
                       color="blue.200"
                       textDecoration={"underline"}
                     >
                       {item}
-                    </Link>
+                    </RLink>
                     {i !== fil(noun as string).length - 1 && <>・</>}
                   </>
                 );

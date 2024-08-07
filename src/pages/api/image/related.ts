@@ -48,7 +48,7 @@ export default async function handler(
   }
   const shouldGetIds = jaccardResult
     .sort((a, b) => b.jaccard - a.jaccard)
-    .slice(0, 60)
+    .slice(0, 100)
     .reduce((group: string[], item) => {
       if (!group) group = [];
       group.push(item.id);
