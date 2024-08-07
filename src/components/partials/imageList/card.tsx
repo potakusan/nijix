@@ -203,25 +203,25 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
           >
             詳細
           </Button>
-          <Tooltip
-            label="このイラストに登録されたタグを絞り込み条件に追加します"
-            fontSize="md"
+          <Button
+            onClick={onOpen}
+            isDisabled={unavailable}
+            variant="solid"
+            colorScheme="facebook"
+            sx={{
+              borderTopRightRadius: 0,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "20%",
+            }}
           >
-            <Button
-              onClick={onOpen}
-              isDisabled={unavailable}
-              variant="solid"
-              colorScheme="facebook"
-              sx={{
-                borderTopRightRadius: 0,
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                width: "20%",
-              }}
+            <Tooltip
+              label="このイラストに登録されたタグを絞り込み条件に追加します"
+              fontSize="md"
             >
               <AddIcon />
-            </Button>
-          </Tooltip>
+            </Tooltip>
+          </Button>
         </ButtonGroup>
         {isOpen && (
           <TagSelectFromImage isOpen={isOpen} onClose={onClose} id={props.id} />
