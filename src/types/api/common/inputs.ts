@@ -13,7 +13,7 @@ export interface CommonSearchRequestInputs {
   view: "tags" | "nouns";
 }
 
-export interface CommonIndivisualImageRequestInputs {
+export interface CommonIndividualImageRequestInputs {
   id: string;
 }
 

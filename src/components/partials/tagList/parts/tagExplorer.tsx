@@ -17,7 +17,11 @@ import {
   TagRightIcon,
   Text,
 } from "@chakra-ui/react";
-import { SmallAddIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import {
+  ExternalLinkIcon,
+  SmallAddIcon,
+  SmallCloseIcon,
+} from "@chakra-ui/icons";
 import { generateNewPath } from "@/_frontend/generateNewPath";
 import { useSearchParams } from "next/navigation";
 import useSWRInfinite from "swr/infinite";
@@ -131,6 +135,20 @@ export const TagExplorer: FC<{
         >
           更に読み込み
         </Button>
+      )}
+      {_noun && artist && (
+        <>
+          <Text mt="3" fontSize="xs" as="p" textAlign={"right"}>
+            <RLink
+              as={Link}
+              href={`/search/${tag}/${noun}/1`}
+              display={"inline-block"}
+            >
+              全てのイラストを検索
+              <ExternalLinkIcon mx="2px" />
+            </RLink>
+          </Text>
+        </>
       )}
     </>
   );

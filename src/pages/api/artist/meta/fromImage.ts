@@ -1,5 +1,5 @@
-import { IndivisualImageRequestFormatter } from "@/backend/requests/indivisualImageRequest";
-import { IndivisualArtistAPI } from "@/backend/sql/artist";
+import { IndividualImageRequestFormatter } from "@/backend/requests/individualImageRequest";
+import { IndividualArtistAPI } from "@/backend/sql/artist";
 import {
   checkHTTPRequests,
   makeError,
@@ -17,9 +17,9 @@ export default async function handler(
   if (!isValidReuest) {
     return res.status(403).json(makeError(requestErrorMessage, 0));
   }
-  const i = await new IndivisualArtistAPI().connect();
+  const i = await new IndividualArtistAPI().connect();
 
-  const { success, inputs } = IndivisualImageRequestFormatter(
+  const { success, inputs } = IndividualImageRequestFormatter(
     req.query as CommonQueries
   );
   if (!success || !inputs) {

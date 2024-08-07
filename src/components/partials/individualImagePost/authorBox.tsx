@@ -73,6 +73,7 @@ export default function ArtistBox() {
           <Divider m={4} />
           <Box mt={4} display="block" className="authorImages">
             <Slider
+              lazyLoad={"ondemand"}
               infinite={data.body.length !== 1}
               centerMode
               centerPadding="60px"

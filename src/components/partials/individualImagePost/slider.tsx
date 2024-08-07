@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "@/_frontend/fetch";
-import { IndivisualIllustType } from "@/types/api/image";
+import { IndividualIllustType } from "@/types/api/image";
 import { FC } from "react";
 
 const settings = {
@@ -17,7 +17,7 @@ const settings = {
 const Carousel: FC<{ setError: (input: boolean) => void }> = ({ setError }) => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error, isLoading } = useSWR<IndivisualIllustType>(
+  const { data, error, isLoading } = useSWR<IndividualIllustType>(
     id ? `/image/list?id=${id}` : null,
     fetcher
   );

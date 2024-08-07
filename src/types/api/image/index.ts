@@ -1,4 +1,4 @@
-export type IndivisualIllustType = {
+export type IndividualIllustType = {
   error: boolean;
   errorMessage?: string;
   body: ImageListResultSet[];

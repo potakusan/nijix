@@ -15,8 +15,12 @@ import { useRouter } from "next/router";
 import { ConditionsSelector } from "../tagList/oneSelector";
 import { PagingWrapper } from "../imageList/pagenation";
 import { PageHead } from "@/pages/search/[tag]/[noun]/[page]";
+import useSWR from "swr";
+import { ArtistMetaResultType1 } from "@/types/api/artist";
+import { queryGenerator } from "@/_frontend/queryGenerator";
+import { fetcher } from "@/_frontend/fetch";
 
-export const IndivisualArtistLayout = () => {
+export const IndividualArtistLayout = () => {
   const router = useRouter();
   const [error, setError] = useState<boolean>(false);
   const { id } = router.query;
@@ -25,7 +29,7 @@ export const IndivisualArtistLayout = () => {
   }
   return (
     <>
-      <PageHead>test</PageHead>
+      <Header />
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
         <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
           <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
@@ -70,5 +74,37 @@ const Error = () => {
       </Box>
       <TopSlider component={"a"} />
     </>
+  );
+};
+
+const Header = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  const qs = [`id=${id || "_"}`];
+  const { data, error, isLoading } = useSWR<ArtistMetaResultType1>(
+    id ? `/artist/meta?${queryGenerator(qs)}` : null,
+    fetcher
+  );
+  console.log(data);
+  if (error) return null;
+  if (isLoading || !data) {
+    return <PageHead>-</PageHead>;
+  }
+  if (!isLoading && !data) {
+    return null; //404
+  }
+  return (
+    <PageHead>
+      <Box>
+        <Heading
+          fontWeight={600}
+          p={4}
+          fontSize={{ base: "2xl", sm: "4xl", md: "4xl" }}
+          lineHeight={"110%"}
+        >
+          {data.body.username}さんのイラスト({data.body.tweetCount}枚)
+        </Heading>
+      </Box>
+    </PageHead>
   );
 };

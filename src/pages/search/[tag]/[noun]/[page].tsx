@@ -34,52 +34,59 @@ export default function SearchByTagAndNouns() {
   return (
     <Wrapper>
       <PageHead>
-        {router.isReady ? (
-          <>
-            {fil(tag as string).map((item, i) => {
-              const path = pathGenerator("tag", item);
-              return (
-                <>
-                  <Link
-                    key={item}
-                    href={path}
-                    color="blue.200"
-                    textDecoration={"underline"}
-                  >
-                    {item}
-                  </Link>
-                  {i !== fil(tag as string).length - 1 && <>・</>}
-                </>
-              );
-            })}
-            {fil(tag as string).length > 0 &&
-              fil(noun as string).length > 0 && <>・</>}
-            {fil(noun as string).map((item, i) => {
-              const path = pathGenerator("noun", item);
-              return (
-                <>
-                  <Link
-                    key={item}
-                    href={path}
-                    color="blue.200"
-                    textDecoration={"underline"}
-                  >
-                    {item}
-                  </Link>
-                  {i !== fil(noun as string).length - 1 && <>・</>}
-                </>
-              );
-            })}
-            {fil(tag as string).length === 0 &&
-            fil(noun as string).length === 0 ? (
-              <>50万枚以上のえっちなイラストを探索する</>
-            ) : (
-              <>のイラスト</>
-            )}
-          </>
-        ) : (
-          <>&nbsp;</>
-        )}
+        <Heading
+          fontWeight={600}
+          p={4}
+          fontSize={{ base: "2xl", sm: "4xl", md: "4xl" }}
+          lineHeight={"110%"}
+        >
+          {router.isReady ? (
+            <>
+              {fil(tag as string).map((item, i) => {
+                const path = pathGenerator("tag", item);
+                return (
+                  <>
+                    <Link
+                      key={item}
+                      href={path}
+                      color="blue.200"
+                      textDecoration={"underline"}
+                    >
+                      {item}
+                    </Link>
+                    {i !== fil(tag as string).length - 1 && <>-</>}
+                  </>
+                );
+              })}
+              {fil(tag as string).length > 0 &&
+                fil(noun as string).length > 0 && <>・</>}
+              {fil(noun as string).map((item, i) => {
+                const path = pathGenerator("noun", item);
+                return (
+                  <>
+                    <Link
+                      key={item}
+                      href={path}
+                      color="blue.200"
+                      textDecoration={"underline"}
+                    >
+                      {item}
+                    </Link>
+                    {i !== fil(noun as string).length - 1 && <>-</>}
+                  </>
+                );
+              })}
+              {fil(tag as string).length === 0 &&
+              fil(noun as string).length === 0 ? (
+                <>50万枚以上のえっちなイラストを探索する</>
+              ) : (
+                <>のイラスト</>
+              )}
+            </>
+          ) : (
+            <>&nbsp;</>
+          )}
+        </Heading>
       </PageHead>
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
         <Grid templateColumns={"repeat(12, 1fr)"} gap={4}>
@@ -108,14 +115,7 @@ export const PageHead: FC<{ children: any }> = ({ children }) => {
       spacing={{ base: 8, md: 14 }}
       py={{ base: 12, md: 8, lg: 12, xl: 20 }}
     >
-      <Heading
-        fontWeight={600}
-        p={4}
-        fontSize={{ base: "2xl", sm: "4xl", md: "4xl" }}
-        lineHeight={"110%"}
-      >
-        {children}
-      </Heading>
+      {children}
     </Stack>
   );
 };

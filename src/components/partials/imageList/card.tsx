@@ -1,7 +1,7 @@
 import { textConverts } from "@/_frontend/convert";
 import { generateOriginalUrl } from "@/_frontend/generateOriginalUrl";
 import { ImageResultSet } from "@/types/api/search/images";
-import { CopyIcon, WarningIcon } from "@chakra-ui/icons";
+import { AddIcon, CopyIcon, WarningIcon } from "@chakra-ui/icons";
 import {
   Card,
   CardBody,
@@ -21,6 +21,7 @@ import {
   HStack,
   Tag,
   TagLeftIcon,
+  Tooltip,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FC, useState } from "react";
@@ -79,6 +80,8 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
         <Link href={href}>
           {!unavailable && (
             <Image
+              title={props.text}
+              alt={props.text}
               sx={{
                 objectFit: "cover",
                 margin: "0 auto",
@@ -101,7 +104,6 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
               width={"100%"}
               height={300}
               src={props.px_thumb || props.url}
-              alt={props.text}
               borderRadius="lg"
             />
           )}
@@ -178,7 +180,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             href={originalURL}
             variant="outline"
             colorScheme="facebook"
-            sx={{ borderTopLeftRadius: 0, width: "50%" }}
+            sx={{ borderTopLeftRadius: 0, width: "40%" }}
           >
             ソース
           </Button>
@@ -186,12 +188,34 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             isDisabled={unavailable}
             href={href}
             as={Link}
-            variant="solid"
+            variant="outline"
             colorScheme="facebook"
-            sx={{ borderTopRightRadius: 0, width: "50%" }}
+            sx={{
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              width: "40%",
+            }}
           >
             詳細
           </Button>
+          <Tooltip
+            label="このイラストに登録されたタグを絞り込み条件に追加します"
+            fontSize="md"
+          >
+            <Button
+              isDisabled={unavailable}
+              variant="solid"
+              colorScheme="facebook"
+              sx={{
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                width: "20%",
+              }}
+            >
+              <AddIcon />
+            </Button>
+          </Tooltip>
         </ButtonGroup>
       </CardFooter>
     </Card>

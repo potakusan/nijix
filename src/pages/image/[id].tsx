@@ -1,10 +1,10 @@
 import { Wrapper } from "@/components/common/wrapper";
-import { IndivisualImagePostLayout } from "@/components/partials/indivisualImagePost/_layout";
+import { IndividualImagePostLayout } from "@/components/partials/individualImagePost/_layout";
 
-export default function IndivisualImagePage() {
+export default function IndividualImagePage() {
   return (
     <Wrapper>
-      <IndivisualImagePostLayout />
+      <IndividualImagePostLayout />
     </Wrapper>
   );
 }

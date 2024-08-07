@@ -1,7 +1,7 @@
 import { ArtistMetaResultSet } from "@/types/api/artist";
 import SQLFuncWrapper from "..";
 
-export class IndivisualArtistAPI extends SQLFuncWrapper {
+export class IndividualArtistAPI extends SQLFuncWrapper {
   private id: string | null = null;
   setId(input: string) {
     this.id = input;
@@ -17,9 +17,23 @@ export class IndivisualArtistAPI extends SQLFuncWrapper {
         this.id
       )} LIMIT 1) AS tw1 ON tw1.author_id = au.author_id
       JOIN tweets AS tw ON tw.author_id = au.author_id
-      JOIN images AS im ON im.id = tw.id AND im.increment = 1
-      LIMIT 20;
+      JOIN images AS im ON im.id = tw.id AND im.increment = 1 LIMIT 100;
     `);
     return rows;
+  }
+
+  async getMeta() {
+    if (!this.con) return null;
+    if (!this.authorId) return null;
+    const query = `SELECT authors.*,tweetCount FROM authors
+    JOIN (SELECT author_id,COUNT(*) AS tweetCount FROM tweets
+      WHERE author_id = ${this.e(
+        this.authorId
+      )} GROUP BY author_id) tw ON authors.author_id = tw.author_id
+    WHERE authors.author_id = ${this.e(this.authorId)}`;
+    const [rows, _fields] = await this.con.execute<ArtistMetaResultSet[]>(
+      query
+    );
+    return rows.length === 0 ? null : rows[0];
   }
 }

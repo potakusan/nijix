@@ -1,4 +1,4 @@
-import { IndivisualImageRequestFormatter } from "@/backend/requests/indivisualImageRequest";
+import { IndividualImageRequestFormatter } from "@/backend/requests/individualImageRequest";
 import { IndividualIllustAPI } from "@/backend/sql/image";
 import {
   checkHTTPRequests,
@@ -19,7 +19,7 @@ export default async function handler(
   }
   const i = await new IndividualIllustAPI().connect();
 
-  const { success, inputs } = IndivisualImageRequestFormatter(
+  const { success, inputs } = IndividualImageRequestFormatter(
     req.query as CommonQueries
   );
   if (!success || !inputs) {

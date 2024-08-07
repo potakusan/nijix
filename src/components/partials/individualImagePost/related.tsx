@@ -30,6 +30,7 @@ export default function RelatedImages() {
             breakpoint: 768,
             settings: {
               slidesToShow: 3,
+              slidesToScroll: 1,
             },
           },
         ]}

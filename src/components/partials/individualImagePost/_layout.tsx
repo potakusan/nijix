@@ -17,7 +17,7 @@ import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { TopSlider } from "@/pages";
 
-export const IndivisualImagePostLayout = () => {
+export const IndividualImagePostLayout = () => {
   const [error, setError] = useState<boolean>(false);
   if (error) {
     return <Error />;
