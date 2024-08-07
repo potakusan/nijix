@@ -23,7 +23,6 @@ export default function RelatedImages() {
         Related Images
       </Heading>
       <Slider
-        lazyLoad="ondemand"
         slidesToShow={6}
         slidesToScroll={3}
         responsive={[
