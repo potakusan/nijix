@@ -79,7 +79,7 @@ export const TagSelectFromImage: FC<{
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Choice your favours</ModalHeader>
+          <ModalHeader>Chooce your favours</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}></ModalBody>
           {error && <>Error</>}
