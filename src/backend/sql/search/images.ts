@@ -46,7 +46,6 @@ export class IllustAPI extends SQLFuncWrapper {
         //tagもnounsも複数
       }
     }
-    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
@@ -108,7 +107,6 @@ export class IllustAPI extends SQLFuncWrapper {
       */
       if (!this.hparams) return;
       let conditions: string[] = [];
-      console.log(this.hparams);
       const allColumns = [
         "general",
         "sensitive",

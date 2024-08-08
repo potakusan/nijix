@@ -85,7 +85,6 @@ const Header = () => {
     id ? `/artist/meta?${queryGenerator(qs)}` : null,
     fetcher
   );
-  console.log(data);
   if (error) return null;
   if (isLoading || !data) {
     return <PageHead>-</PageHead>;

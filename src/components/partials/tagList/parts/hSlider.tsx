@@ -37,8 +37,6 @@ export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
     fetcher
   );
 
-  console.log(data);
-
   const displays: { [key in HParams]: string } = {
     general: "全年齢",
     sensitive: "R-12",
