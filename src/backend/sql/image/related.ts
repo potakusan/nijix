@@ -65,7 +65,6 @@ export class IndividualRelatedIllustAPI extends IndividualIllustAPI {
         return group;
       }, [])
       .join(",")})`;
-    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }

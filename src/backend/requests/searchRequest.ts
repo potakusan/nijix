@@ -23,6 +23,7 @@ export const SearchRequestFormatter = (queries: {
     seed: "",
     sort: "",
     view: "tags",
+    text: "",
   };
 
   inputs.tags = queries.tags ? queries.tags.split(",") : [];
@@ -63,6 +64,7 @@ export const SearchRequestFormatter = (queries: {
 
   inputs.seed = queries.seed || "";
   inputs.sort = queries.sort || "created_at,desc";
+  inputs.text = queries.text || "";
 
   inputs.hParams = validateHParams((queries.hparams || "").split(","));
 

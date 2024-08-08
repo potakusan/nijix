@@ -12,11 +12,13 @@ import {
   Image,
   Card,
   Link,
+  Divider,
 } from "@chakra-ui/react";
 import RLink from "next/link";
 import useSWR from "swr";
 import Slider from "react-slick";
 import { FC, useMemo } from "react";
+import SearchInput from "@/components/partials/searchInput";
 
 export default function Home() {
   const Slider1 = useMemo(() => <TopSlider />, []);
@@ -68,6 +70,8 @@ export default function Home() {
                 Start explore
               </Button>
             </Stack>
+            <Divider />
+            <SearchInput />
           </Stack>
         </Container>
         {Slider1}

@@ -139,13 +139,9 @@ export default class SQLFuncWrapper extends SQLFunc {
   protected hparams: HParams[] | null = null;
 
   isHParamsChanged = () =>
-    this.hparams !== null ||
-    !(
-      this.hparams &&
-      (["general", "sensitive", "questionable", "explicit"] as HParams[]).every(
-        (v) => (this.hparams as HParams[]).includes(v)
-      )
-    );
+    this.hparams !== null &&
+    this.hparams &&
+    (this.hparams as HParams[]).length !== 4;
 
   setHParams = (inputs: HParams[] | null) => (this.hparams = inputs);
 

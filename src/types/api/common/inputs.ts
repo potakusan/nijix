@@ -13,6 +13,7 @@ export interface CommonSearchRequestInputs {
   sort: string;
   seed: string;
   view: "tags" | "nouns";
+  text?: string;
 }
 
 export interface CommonIndividualImageRequestInputs {

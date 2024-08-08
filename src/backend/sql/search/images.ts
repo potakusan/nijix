@@ -6,46 +6,15 @@ import dayjs from "dayjs";
 export class IllustAPI extends SQLFuncWrapper {
   async execMethod() {
     if (!this.con) return;
-    const tlen = this.tags.length;
-    const nlen = this.nouns.length;
-    let query = "";
-    if (tlen === 0) {
-      if (nlen === 0) {
-        //検索条件なし
-        query = this.searchWithNoCondition();
-      }
-      if (nlen === 1) {
-        //tag条件なし、nouns1こだけ
-        query = this.searchByOnlyOneTagOrOneNoun("noun_tags");
-      }
-      if (nlen > 1) {
-        //tag条件なし、nouns複数
-      }
+    let query = this.gen();
+    if (
+      this.tags.length === 0 &&
+      this.nouns.length === 0 &&
+      !this.isHParamsChanged()
+    ) {
+      query = this.withNoConds();
     }
-    if (tlen === 1) {
-      if (nlen === 0) {
-        //tag1こだけ、nounsなし
-        query = this.searchByOnlyOneTagOrOneNoun("tags");
-      }
-      if (nlen === 1) {
-        //tagもnounsも1こだけ
-        query = this.searchByBothOfOneTagAndOneNoun();
-      }
-      if (nlen > 1) {
-        //tag1こだけ、nouns複数
-      }
-    }
-    if (tlen === 2) {
-      if (nlen === 0) {
-        //tag複数、nounsなし
-      }
-      if (nlen === 1) {
-        //tag複数、nouns1こだけ
-      }
-      if (nlen > 1) {
-        //tagもnounsも複数
-      }
-    }
+    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
@@ -166,36 +135,48 @@ export class IllustAPI extends SQLFuncWrapper {
     }
   }
 
-  searchWithNoCondition() {
-    this.makeConditions({});
-    let sqlQuery = `
-    SELECT 
-        ${this.joinSelectedColumns()}
-    FROM tweets AS t
-    ${this.joinJoins()}
-    ${this.joinWhereConditions()}
-    ${this.orderBy()}
-    LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
-    return sqlQuery;
-  }
-
-  // tags:length1, nouns:length0 OR vice versa
-  searchByOnlyOneTagOrOneNoun(target: "noun_tags" | "tags") {
-    if (target === "tags" && !this.tags) throw new Error("TAGS_NOT_SPECIFIED");
-    if (target === "noun_tags" && !this.nouns)
-      throw new Error("NOUNS_NOT_SPECIFIED");
-    const tag = target === "tags" ? this.tags[0] : this.nouns[0];
-
+  gen() {
+    const make = (
+      input: string[],
+      target: "tags" | "noun_tags",
+      alias: string
+    ) => {
+      let i = 0;
+      const res = input.reduce((group: string[], item) => {
+        if (!group) group = [];
+        if (item === "_") return [];
+        group.push(
+          `JOIN ${target} AS ${alias}${i} ON ${alias}${i}.id = t.id AND ${alias}${i}.tag = ${this.e(
+            item
+          )}`
+        );
+        i++;
+        return group;
+      }, []);
+      return res;
+    };
     this.makeConditions({
-      wheres: [
-        target === "tags"
-          ? `tags.tag = ${this.e(tag)}`
-          : `noun_tags.tag = ${this.e(tag)}`,
-      ],
-      joins: [`JOIN ${target} ON ${target}.id = t.id`],
+      joins: make(this.tags, "tags", "X").concat(
+        make(this.nouns, "noun_tags", "Y")
+      ),
     });
+    return this.finallyGenerate();
+  }
 
-    let sqlQuery = `
+  withNoConds = () => `
+    WITH filtered_tweets AS (
+      SELECT t.id, t.text, t.created_at, t.added_at, t.text_lower, t.has_images, t.ai, t.author_id
+      FROM tweets t
+      ${this.joinWhereConditions()}
+      ORDER BY created_at DESC
+      LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)}
+    )
+    SELECT 
+        ${this.joinSelectedColumns()}
+    FROM filtered_tweets t
+    ${this.joinJoins()};`;
+
+  finallyGenerate = () => `
     SELECT 
         ${this.joinSelectedColumns()}
     FROM tweets AS t
@@ -203,34 +184,4 @@ export class IllustAPI extends SQLFuncWrapper {
     ${this.joinWhereConditions()}
     ${this.orderBy()}
     LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
-    return sqlQuery;
-  }
-
-  // tags:length1, nouns:length1
-  searchByBothOfOneTagAndOneNoun() {
-    if (!this.tags || this.tags.length === 0)
-      throw new Error("TAGS_NOT_SPECIFIED");
-    if (!this.nouns || this.tags.length === 0)
-      throw new Error("NOUNS_NOT_SPECIFIED");
-    const tag = this.tags[0];
-    const noun = this.nouns[0];
-
-    this.makeConditions({
-      wheres: [`tags.tag = ${this.e(tag)}`, `noun_tags.tag = ${this.e(noun)}`],
-      joins: [
-        `JOIN tags ON t.id = tags.id`,
-        `JOIN noun_tags ON t.id = noun_tags.id`,
-      ],
-    });
-
-    let sqlQuery = `
-    SELECT 
-        ${this.joinSelectedColumns()}
-    FROM tweets AS t
-    ${this.joinJoins()}
-    ${this.joinWhereConditions()}
-    ${this.orderBy()}
-    LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
-    return sqlQuery;
-  }
 }

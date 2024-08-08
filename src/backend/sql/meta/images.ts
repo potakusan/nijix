@@ -1,4 +1,3 @@
-import { ImageResultSet } from "@/types/api/search/images";
 import { IllustAPI } from "../search/images";
 import { ConditionInputs } from "@/types/api/meta/images";
 
@@ -17,4 +16,15 @@ export class IllustMetaAPI extends IllustAPI {
     }
     this.setOverrideCols();
   };
+
+  withNoConds = () => `
+    WITH filtered_tweets AS (
+      SELECT t.id, t.author_id
+      FROM tweets t
+      ${this.joinWhereConditions()}
+    )
+    SELECT 
+        ${this.joinSelectedColumns()}
+    FROM filtered_tweets t
+    ${this.joinJoins()};`;
 }
