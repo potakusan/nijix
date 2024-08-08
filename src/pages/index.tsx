@@ -47,6 +47,12 @@ export default function Home() {
             </Heading>
             <Text fontSize="sm">
               *イラストはすべて引用形式で掲載しており、作者が削除すると自動的に非表示になります。
+              <br />
+              NijiXはβ版提供のため動作が遅かったり不安定な場合があります。その場合は
+              <Link href="https://v1.nyaa.ltd" isExternal color="teal.400">
+                NijiTwi
+              </Link>
+              をご利用ください。
             </Text>
             <Text color={"gray.500"}></Text>
             <Stack
