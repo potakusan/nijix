@@ -14,7 +14,7 @@ import {
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 
 export default function SearchByTagAndNouns() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function SearchByTagAndNouns() {
               {fil(tag as string).map((item, i) => {
                 const path = pathGenerator("tag", item);
                 return (
-                  <>
+                  <Fragment key={i}>
                     <RLink
                       as={Link}
                       key={item}
@@ -57,7 +57,7 @@ export default function SearchByTagAndNouns() {
                       {item}
                     </RLink>
                     {i !== fil(tag as string).length - 1 && <>・</>}
-                  </>
+                  </Fragment>
                 );
               })}
               {fil(tag as string).length > 0 &&
@@ -65,7 +65,7 @@ export default function SearchByTagAndNouns() {
               {fil(noun as string).map((item, i) => {
                 const path = pathGenerator("noun", item);
                 return (
-                  <>
+                  <Fragment key={i}>
                     <RLink
                       as={Link}
                       key={item}
@@ -76,7 +76,7 @@ export default function SearchByTagAndNouns() {
                       {item}
                     </RLink>
                     {i !== fil(noun as string).length - 1 && <>・</>}
-                  </>
+                  </Fragment>
                 );
               })}
               {fil(tag as string).length === 0 &&

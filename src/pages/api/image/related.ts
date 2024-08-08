@@ -54,7 +54,6 @@ export default async function handler(
       group.push(item.id);
       return group;
     }, []);
-
   const response = await i.getDataSet(shouldGetIds);
 
   i.destroy();

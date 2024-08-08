@@ -54,6 +54,7 @@ export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
         ).map((item) => {
           return (
             <Checkbox
+              key={item}
               sx={{ width: "100%" }}
               isChecked={current.indexOf(item) > -1}
               value={item}
@@ -65,7 +66,7 @@ export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
                   c.push(item);
                 }
                 router.push(
-                  `/${
+                  `${
                     artist ? `/artist/${artist}` : `/search`
                   }/${tag}/${noun}/1${getUpdatedSearchParams(params, {
                     key: "hparams",
