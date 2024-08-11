@@ -19,6 +19,7 @@ import useSWR from "swr";
 import { ArtistMetaResultType1 } from "@/types/api/artist";
 import { queryGenerator } from "@/_frontend/queryGenerator";
 import { fetcher } from "@/_frontend/fetch";
+import { NavBarButton } from "../navBar";
 
 export const IndividualArtistLayout = () => {
   const router = useRouter();
@@ -104,6 +105,7 @@ const Header = () => {
           {data.body.username}さんのイラスト({data.body.tweetCount}枚)
         </Heading>
       </Box>
+      <NavBarButton _artist={(id as string) || ""} />
     </PageHead>
   );
 };

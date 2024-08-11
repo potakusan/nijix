@@ -1,5 +1,6 @@
 import { Wrapper } from "@/components/common/wrapper";
 import { PagingWrapper } from "@/components/partials/imageList/pagenation";
+import { NavBarButton } from "@/components/partials/navBar";
 import { ConditionsSelector } from "@/components/partials/tagList/oneSelector";
 import {
   Box,
@@ -101,6 +102,7 @@ export default function SearchByTagAndNouns() {
           </GridItem>
         </Grid>
       </Container>
+      <NavBarButton />
     </Wrapper>
   );
 }

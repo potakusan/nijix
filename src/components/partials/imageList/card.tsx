@@ -23,10 +23,12 @@ import {
   TagLeftIcon,
   Tooltip,
   useDisclosure,
+  Box,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FC, useState } from "react";
 import { TagSelectFromImage } from "../tagList/fromImage";
+import { FavButton } from "../favourites/favButton";
 
 export const ImageCardSkeleton = () => (
   <Card sx={{ width: "100%", maxWidth: "400px" }}>
@@ -82,8 +84,8 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
   return (
     <Card sx={{ width: "100%", maxWidth: "400px" }}>
       <CardBody sx={{ paddingBottom: "4px" }}>
-        <Link href={href}>
-          {!unavailable && (
+        {!unavailable && (
+          <Link href={href}>
             <Image
               title={props.text}
               alt={props.text}
@@ -111,48 +113,48 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
               src={props.px_thumb || props.url}
               borderRadius="lg"
             />
-          )}
-          {unavailable && (
-            <Alert
-              status="error"
-              variant="subtle"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              textAlign="center"
-              height="300"
-            >
-              <AlertIcon boxSize="40px" mr={0} />
-              <AlertTitle mt={4} mb={1} fontSize="lg">
-                UNAVAILABLE
-              </AlertTitle>
-              <AlertDescription maxWidth="sm">
-                この投稿は作者によって削除されたか、非公開状態のため利用できません。
-              </AlertDescription>
-            </Alert>
-          )}
-          <HStack
-            spacing={1}
-            sx={{
-              position: "absolute",
-              right: "8px",
-              top: "10px",
-            }}
+          </Link>
+        )}
+        {unavailable && (
+          <Alert
+            status="error"
+            variant="subtle"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            textAlign="center"
+            height="300"
           >
-            {props.ai && (
-              <Tag variant="solid" colorScheme="facebook">
-                <TagLeftIcon as={WarningIcon} />
-                AIイラスト
-              </Tag>
-            )}
-            {props.has_images > 1 && (
-              <Tag variant="solid" colorScheme="facebook">
-                <TagLeftIcon as={CopyIcon} />
-                {props.has_images}枚
-              </Tag>
-            )}
-          </HStack>
-        </Link>
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              UNAVAILABLE
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              この投稿は作者によって削除されたか、非公開状態のため利用できません。
+            </AlertDescription>
+          </Alert>
+        )}
+        <HStack
+          spacing={1}
+          sx={{
+            position: "absolute",
+            right: "8px",
+            top: "10px",
+          }}
+        >
+          {props.ai && (
+            <Tag variant="solid" colorScheme="facebook">
+              <TagLeftIcon as={WarningIcon} />
+              AIイラスト
+            </Tag>
+          )}
+          {props.has_images > 1 && (
+            <Tag variant="solid" colorScheme="facebook">
+              <TagLeftIcon as={CopyIcon} />
+              {props.has_images}枚
+            </Tag>
+          )}
+        </HStack>
         <Stack mt="6" spacing="3">
           <Heading size="md">
             <Link href={`/artist/` + props.author_id + `/_/_/1`}>
@@ -185,7 +187,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             href={originalURL}
             variant="outline"
             colorScheme="facebook"
-            sx={{ borderTopLeftRadius: 0, width: "40%" }}
+            sx={{ borderTopLeftRadius: 0, width: "30%" }}
           >
             ソース
           </Button>
@@ -198,7 +200,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
             sx={{
               borderTopRightRadius: 0,
               borderBottomRightRadius: 0,
-              width: "40%",
+              width: "30%",
             }}
           >
             詳細
@@ -217,10 +219,23 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
           >
             <Tooltip
               label="このイラストに登録されたタグを絞り込み条件に追加します"
-              fontSize="md"
+              fontSize="sm"
             >
               <AddIcon />
             </Tooltip>
+          </Button>
+          <Button
+            isDisabled={unavailable}
+            variant="solid"
+            colorScheme="blue"
+            sx={{
+              borderTopRightRadius: 0,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              width: "20%",
+            }}
+          >
+            <FavButton id={props.id} />
           </Button>
         </ButtonGroup>
         {isOpen && (

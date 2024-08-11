@@ -32,7 +32,7 @@ export default function ArtistBox() {
     return null;
   }
   return (
-    <Box>
+    <Box mt={4}>
       <Card>
         <CardBody>
           <Box>

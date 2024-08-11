@@ -78,7 +78,7 @@ export const TagSelectFromImage: FC<{
     <Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent mx={4}>
           <ModalHeader>Choose your favours</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}></ModalBody>

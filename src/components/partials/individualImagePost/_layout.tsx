@@ -16,6 +16,7 @@ import RelatedImages from "./related";
 import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { TopSlider } from "@/pages";
+import { FavBox } from "../favourites/favButton";
 
 export const IndividualImagePostLayout = () => {
   const [error, setError] = useState<boolean>(false);
@@ -30,6 +31,7 @@ export const IndividualImagePostLayout = () => {
           <RelatedImages />
         </GridItem>
         <GridItem w="100%" colSpan={{ base: 12, sm: 12, md: 4, lg: 3 }}>
+          <FavBox />
           <ArtistBox />
           <TagsBox />
           <SDTagsBox />
