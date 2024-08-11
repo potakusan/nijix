@@ -24,6 +24,7 @@ export const SearchRequestFormatter = (queries: {
     sort: "",
     view: "tags",
     text: "",
+    favs: [],
   };
 
   inputs.tags = queries.tags ? queries.tags.split(",") : [];
@@ -67,6 +68,9 @@ export const SearchRequestFormatter = (queries: {
   inputs.text = queries.text || "";
 
   inputs.hParams = validateHParams((queries.hparams || "").split(","));
+  if (queries.favs) {
+    inputs.favs = queries.favs.split(",");
+  }
 
   return { success: true, inputs: inputs };
 };

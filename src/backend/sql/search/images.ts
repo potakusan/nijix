@@ -4,6 +4,22 @@ import SQLFuncWrapper from "..";
 import dayjs from "dayjs";
 
 export class IllustAPI extends SQLFuncWrapper {
+  protected favs: string[] = [];
+  setFavs = (input: string[]) => (this.favs = input);
+  protected addFavsCond() {
+    if (this.favs.length > 0) {
+      this.wheres.push(`
+        t.id IN (${this.favs
+          .reduce((res: string[], item) => {
+            if (!res) res = [];
+            res.push(this.e(item));
+            return res;
+          }, [])
+          .join(",")})
+      `);
+    }
+  }
+
   async execMethod() {
     if (!this.con) return;
     let query = this.gen();
@@ -14,7 +30,6 @@ export class IllustAPI extends SQLFuncWrapper {
     ) {
       query = this.withNoConds();
     }
-    console.log(query);
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(query);
     return rows;
   }
@@ -56,6 +71,7 @@ export class IllustAPI extends SQLFuncWrapper {
     this.mkCondHParams();
     this.mkCondAiMode();
     this.mkCondDate();
+    this.addFavsCond();
   }
 
   protected mkCondHParams() {

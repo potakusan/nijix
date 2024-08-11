@@ -37,6 +37,9 @@ export default async function handler(
   } else {
     i.setNouns(inputs.nouns);
   }
+  if (inputs.favs) {
+    i.setFavs(inputs.favs);
+  }
 
   i.setOffset(inputs.offset);
   i.setLimit(inputs.limit);

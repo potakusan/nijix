@@ -14,6 +14,7 @@ export interface CommonSearchRequestInputs {
   seed: string;
   view: "tags" | "nouns";
   text?: string;
+  favs?: string[];
 }
 
 export interface CommonIndividualImageRequestInputs {

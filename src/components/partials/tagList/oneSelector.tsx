@@ -4,7 +4,10 @@ import { AIChoice } from "./parts/aiChoice";
 import { FC } from "react";
 import { HSlider } from "./parts/hSlider";
 
-export const ConditionsSelector: FC<{ artist?: string }> = ({ artist }) => {
+export const ConditionsSelector: FC<{
+  artist?: string;
+  favourite?: boolean;
+}> = ({ artist, favourite }) => {
   return (
     <Box sx={{ position: "sticky", top: "0" }}>
       <Box sx={{ overflowY: "auto", maxHeight: "100vh" }} p={2}>

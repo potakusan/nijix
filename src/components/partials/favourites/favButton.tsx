@@ -3,7 +3,7 @@ import { FavouriteIcon, UnfavouriteIcon } from "./_icons";
 import { useRouter } from "next/router";
 import { Box, Card, CardBody, Heading, Text, Tooltip } from "@chakra-ui/react";
 import dayjs from "dayjs";
-import { FavContentType } from "@/types/api/favs";
+import { getFavsList } from "@/_frontend/genFavsList";
 
 export const FavButton: FC<{ id: string }> = ({ id }) => {
   const router = useRouter();
@@ -11,9 +11,7 @@ export const FavButton: FC<{ id: string }> = ({ id }) => {
   useEffect(() => {
     if (router.isReady) {
       try {
-        const favDir = JSON.parse(
-          window.localStorage.getItem("favs") || "[]"
-        ) as FavContentType[];
+        const favDir = getFavsList();
         setFavStatus(!!favDir.find((item) => item.id === id));
       } catch (e) {
         console.log(e);
@@ -23,9 +21,7 @@ export const FavButton: FC<{ id: string }> = ({ id }) => {
 
   const toggleFav = () => {
     try {
-      let favDir = JSON.parse(
-        window.localStorage.getItem("favs") || "[]"
-      ) as FavContentType[];
+      let favDir = getFavsList();
       const isExists = !!favDir.find((item) => item.id === id);
       if (isExists) {
         favDir = favDir.filter((item) => item.id !== id);
