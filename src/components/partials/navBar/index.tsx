@@ -1,4 +1,4 @@
-import { DeleteIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { DeleteIcon, HamburgerIcon, StarIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -19,16 +19,34 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
 
-export const NavBarButton: FC<{ _artist?: string }> = ({ _artist }) => {
+export const NavBarButton: FC<{
+  _artist?: string;
+  hideFavourite?: boolean;
+}> = ({ _artist, hideFavourite }) => {
   const { isOpen, onToggle } = useDisclosure();
   const { isOpen: isResetOpen, onToggle: onResetToggle } = useDisclosure();
+  const router = useRouter();
   return (
     <Box position="fixed" bottom="2" right="2">
       <VStack>
-        <SlideFade in={isOpen} offsetY="80px">
+        {!hideFavourite && (
+          <SlideFade in={isOpen} offsetY="500px">
+            <Tooltip label="お気に入り" placement="left">
+              <IconButton
+                aria-label="favourite"
+                icon={<StarIcon />}
+                onClick={() => {
+                  router.push("/favourite/_/_/1");
+                  onToggle();
+                }}
+              />
+            </Tooltip>
+          </SlideFade>
+        )}
+        <SlideFade in={isOpen} offsetY="500px">
           <Tooltip label="検索条件リセット" placement="left">
             <IconButton
-              aria-label="add"
+              aria-label="reset"
               icon={<DeleteIcon />}
               onClick={() => {
                 onResetToggle();
@@ -37,16 +55,16 @@ export const NavBarButton: FC<{ _artist?: string }> = ({ _artist }) => {
             />
           </Tooltip>
         </SlideFade>
-        <SlideFade in={isOpen} offsetY="20px">
+        <SlideFade in={isOpen} offsetY="500px">
           <Tooltip label="スライドショー開始" placement="left">
-            <IconButton aria-label="add" icon={<SlideShowIcon />} />
+            <IconButton aria-label="slideshow" icon={<SlideShowIcon />} />
           </Tooltip>
         </SlideFade>
 
         <Tooltip label="操作" placement="left">
           <IconButton
             onClick={onToggle}
-            aria-label="add"
+            aria-label="control"
             icon={<HamburgerIcon />}
           />
         </Tooltip>
