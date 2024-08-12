@@ -18,10 +18,10 @@ export const NavBarButton: FC<{
   _artist?: string;
   hideFavourite?: boolean;
   hideReset?: boolean;
-  dataset?: Slide[] | null | undefined;
+  dataset?: Slide[] | undefined;
   onFavouriteShares?: boolean;
   lightBox?: (
-    data: Slide[] | null | undefined,
+    data: Slide[] | undefined,
     Slideshow: SlideshowType,
     setSlideshow: Dispatch<SetStateAction<SlideshowType>>,
     rawIds?: string[]

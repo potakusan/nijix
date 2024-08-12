@@ -116,14 +116,14 @@ const Header = () => {
           お気に入り({qlen}枚)
         </Heading>
       </Box>
-      {LightBox(null, Slideshow, setSlideshow)}
+      {LightBox(undefined, Slideshow, setSlideshow)}
       <NavBarButton onFavouriteShares dataset={[]} lightBox={LightBox} />
     </PageHead>
   );
 };
 
 const LightBox = (
-  _: Slide[] | null | undefined,
+  _: Slide[] | undefined,
   Slideshow: SlideshowType,
   setSlideshow: Dispatch<SetStateAction<SlideshowType>>
 ) => {

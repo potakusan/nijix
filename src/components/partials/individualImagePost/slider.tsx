@@ -27,7 +27,8 @@ const settings = {
 const LightBox = (
   data: Slide[] | undefined,
   Slideshow: SlideshowType,
-  setSlideshow: Dispatch<SetStateAction<SlideshowType>>
+  setSlideshow: Dispatch<SetStateAction<SlideshowType>>,
+  _?: string[]
 ) => (
   <Lightbox
     slideshow={{ delay: 2000 }}

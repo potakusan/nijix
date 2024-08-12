@@ -121,14 +121,14 @@ const Header: FC<{ len: number; rawIds: string[] }> = ({ len, rawIds }) => {
           共有されたお気に入り({len}枚)
         </Heading>
       </Box>
-      {LightBox(null, Slideshow, setSlideshow, rawIds)}
+      {LightBox(undefined, Slideshow, setSlideshow, rawIds)}
       <NavBarButton dataset={[]} lightBox={LightBox} />
     </PageHead>
   );
 };
 
 const LightBox = (
-  _: Slide[] | null | undefined,
+  _: Slide[] | undefined,
   Slideshow: SlideshowType,
   setSlideshow: Dispatch<SetStateAction<SlideshowType>>,
   rawIds?: string[]
