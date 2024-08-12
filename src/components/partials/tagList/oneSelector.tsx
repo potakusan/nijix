@@ -6,18 +6,18 @@ import { HSlider } from "./parts/hSlider";
 
 export const ConditionsSelector: FC<{
   artist?: string;
-  favourite?: boolean;
+  favourite?: string[];
 }> = ({ artist, favourite }) => {
   return (
     <Box sx={{ position: "sticky", top: "0" }}>
       <Box sx={{ overflowY: "auto", maxHeight: "100vh" }} p={2}>
-        <AIChoice artist={artist} />
+        <AIChoice artist={artist} favourite={favourite} />
         <Divider my={"4"} />
-        <HSlider artist={artist} />
+        <HSlider artist={artist} favourite={favourite} />
         <Divider my={"4"} />
-        <TagExplorer _tag artist={artist} />
+        <TagExplorer _tag artist={artist} favourite={favourite} />
         <Divider my={"4"} />
-        <TagExplorer _noun artist={artist} />
+        <TagExplorer _noun artist={artist} favourite={favourite} />
         <Divider my={"4"} />
       </Box>
     </Box>

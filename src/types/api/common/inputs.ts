@@ -14,7 +14,8 @@ export interface CommonSearchRequestInputs {
   seed: string;
   view: "tags" | "nouns";
   text?: string;
-  favs?: string[];
+  favs?: string[] | null;
+  isSlideshow: boolean;
 }
 
 export interface CommonIndividualImageRequestInputs {

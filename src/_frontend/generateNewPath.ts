@@ -6,7 +6,8 @@ export const generateNewPath = (
   noun: string,
   newTag: string | null = null,
   newNoun: string | null = null,
-  artist?: string
+  artist?: string,
+  favourite?: boolean
 ): string => {
   let tags = tag === "_" ? [] : tag.split(",");
   let nouns = noun === "_" ? [] : noun.split(",");
@@ -24,6 +25,11 @@ export const generateNewPath = (
     } else {
       nouns = nouns.filter((item) => item !== newNoun);
     }
+  }
+  if (favourite) {
+    return `/favourite/${tags.length === 0 ? "_" : tags.join(",")}/${
+      nouns.length === 0 ? "_" : nouns.join(",")
+    }/1?${searches.toString()}`;
   }
   if (artist) {
     return `/artist/${artist}/${tags.length === 0 ? "_" : tags.join(",")}/${

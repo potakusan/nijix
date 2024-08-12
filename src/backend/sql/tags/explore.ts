@@ -2,6 +2,9 @@ import { TagExplorerResultSet } from "@/types/api/tags/explore";
 import SQLFuncWrapper from "..";
 
 export class TagExplorer extends SQLFuncWrapper {
+  protected favs: string[] | null = null;
+  setFavs = (input: string[]) => (this.favs = input);
+
   async get() {
     if (!this.con) return [];
 
@@ -36,6 +39,17 @@ export class TagExplorer extends SQLFuncWrapper {
         joins.push("JOIN sd_ratings sr ON i.id = sr.id");
         conditions.push("(" + hparamsCond.join(" OR ") + ")");
       }
+    }
+    if (this.favs) {
+      conditions.push(`
+        i.id IN (${this.favs
+          .reduce((res: string[], item) => {
+            if (!res) res = [];
+            res.push(this.e(item));
+            return res;
+          }, [])
+          .join(",")})
+      `);
     }
     // Author and date conditions
     const needsTweetsJoin =

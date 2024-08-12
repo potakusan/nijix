@@ -46,13 +46,9 @@ export default function Home() {
               XなどにアップロードされたイラストをAIでタグ付けして横断検索できます。
             </Heading>
             <Text fontSize="sm">
-              *イラストはすべて引用形式で掲載しており、作者が削除すると自動的に非表示になります。
+              *イラストは引用形式で掲載しており、ユーザー環境で作者が削除/非公開にしているか検証しています。
               <br />
-              NijiXはβ版提供のため動作が遅かったり不安定な場合があります。その場合は
-              <Link href="https://v1.nyaa.ltd" isExternal color="teal.400">
-                NijiTwi
-              </Link>
-              をご利用ください。
+              作者が非表示にしたポストは、当サイトでも利用できない状態になります。
             </Text>
             <Text color={"gray.500"}></Text>
             <Stack

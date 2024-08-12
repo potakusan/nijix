@@ -24,7 +24,8 @@ export const SearchRequestFormatter = (queries: {
     sort: "",
     view: "tags",
     text: "",
-    favs: [],
+    favs: null,
+    isSlideshow: false,
   };
 
   inputs.tags = queries.tags ? queries.tags.split(",") : [];
@@ -70,6 +71,10 @@ export const SearchRequestFormatter = (queries: {
   inputs.hParams = validateHParams((queries.hparams || "").split(","));
   if (queries.favs) {
     inputs.favs = queries.favs.split(",");
+  }
+  console.log(queries.isSlideshow);
+  if (queries.isSlideshow) {
+    inputs.isSlideshow = true;
   }
 
   return { success: true, inputs: inputs };

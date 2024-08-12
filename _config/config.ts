@@ -10,3 +10,4 @@ export const db_setting = {
 
 export const GLOBAL_ITEM_NUMBERS_PER_PAGE = 24;
 export const GLOBAL_TAGS_NUMBERS_PER_PAGE = 10;
+export const GLOBAL_INTMAX = 2147483647;

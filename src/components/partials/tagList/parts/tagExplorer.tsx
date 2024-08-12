@@ -32,7 +32,8 @@ export const TagExplorer: FC<{
   _tag?: boolean;
   _noun?: boolean;
   artist?: string;
-}> = ({ _tag, _noun, artist }) => {
+  favourite?: string[];
+}> = ({ _tag, _noun, artist, favourite }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
@@ -48,6 +49,7 @@ export const TagExplorer: FC<{
       `view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`,
     ];
     if (artist) qs.push(`authorId=${artist}`);
+    if (favourite) qs.push(`favs=${favourite.join(",")}`);
     return (tag && noun) || artist
       ? `/tags/explore?${queryGenerator(qs)}`
       : null;
@@ -72,7 +74,8 @@ export const TagExplorer: FC<{
       (noun as string) || "_",
       _tag ? newTag : null,
       _noun ? newTag : null,
-      artist
+      artist,
+      !!favourite
     );
   const isExists = (current: string) => {
     if (_tag) {
@@ -137,7 +140,7 @@ export const TagExplorer: FC<{
           更に読み込み
         </Button>
       )}
-      {_noun && artist && (
+      {_noun && (artist || favourite) && (
         <>
           <Text mt="3" fontSize="xs" as="p" textAlign={"right"}>
             <RLink

@@ -45,15 +45,11 @@ export const PagingWrapper: FC<{ artist?: string; favourite?: boolean }> = ({
     `nouns=${noun || ""}`,
     `limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
     `hparams=${params.get("hparams") || ""}`,
-    `offset=${
-      favourite
-        ? 0
-        : (Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE
-    }`,
+    `offset=${(Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
   ];
   if (artist) qt.push(`authorId=${artist}`);
   if (favourite)
-    qt.push(`favs=${getFavsId(Number(currentPage || 1)).join(",")}`);
+    qt.push(`favs=${getFavsId(Number(currentPage || 1), true).join(",")}`);
 
   const {
     data: listBody,

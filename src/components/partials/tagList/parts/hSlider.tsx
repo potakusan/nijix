@@ -9,7 +9,10 @@ import { HParamExplorerResult } from "@/types/api/hparams";
 import { queryGenerator } from "@/_frontend/queryGenerator";
 import { fetcher } from "@/_frontend/fetch";
 
-export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
+export const HSlider: FC<{ artist?: string; favourite?: string[] }> = ({
+  artist,
+  favourite,
+}) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
@@ -31,6 +34,7 @@ export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
     `limit=${GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
   ];
   if (artist) qt.push(`authorId=${artist}`);
+  if (favourite) qt.push(`favs=${favourite.join(",")}`);
 
   const { data, error, isLoading } = useSWR<HParamExplorerResult>(
     (tag && noun) || artist ? `/hparams/explore?${queryGenerator(qt)}` : null,
@@ -66,8 +70,12 @@ export const HSlider: FC<{ artist?: string }> = ({ artist }) => {
                   c.push(item);
                 }
                 router.push(
-                  `${
-                    artist ? `/artist/${artist}` : `/search`
+                  `/${
+                    artist
+                      ? `artist/${artist}`
+                      : favourite
+                      ? `favourite`
+                      : `search`
                   }/${tag}/${noun}/1${getUpdatedSearchParams(params, {
                     key: "hparams",
                     value: c.join(","),

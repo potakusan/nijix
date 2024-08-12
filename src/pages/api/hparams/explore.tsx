@@ -46,6 +46,9 @@ export default async function handler(
   i.setSinceDate(inputs.sinceDate);
   i.setUntilDate(inputs.untilDate);
   i.setAiMode(inputs.aiMode);
+  if (inputs.favs) {
+    i.setFavs(inputs.favs);
+  }
 
   const response = await i.get();
   i.destroy();

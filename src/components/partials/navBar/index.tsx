@@ -1,3 +1,4 @@
+import { SlideshowType } from "@/types/api/slideshow";
 import { DeleteIcon, HamburgerIcon, StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -17,15 +18,27 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Slide } from "yet-another-react-lightbox";
 
 export const NavBarButton: FC<{
   _artist?: string;
   hideFavourite?: boolean;
-}> = ({ _artist, hideFavourite }) => {
+  hideReset?: boolean;
+  dataset?: Slide[] | null | undefined;
+  lightBox?: (
+    data: Slide[] | null | undefined,
+    Slideshow: SlideshowType,
+    setSlideshow: Dispatch<SetStateAction<SlideshowType>>
+  ) => JSX.Element | null;
+}> = ({ _artist, hideFavourite, hideReset, lightBox, dataset }) => {
   const { isOpen, onToggle } = useDisclosure();
   const { isOpen: isResetOpen, onToggle: onResetToggle } = useDisclosure();
   const router = useRouter();
+  const [Slideshow, setSlideshow] = useState<SlideshowType>({
+    open: false,
+    initial: 0,
+  });
   return (
     <Box position="fixed" bottom="2" right="2">
       <VStack>
@@ -43,24 +56,36 @@ export const NavBarButton: FC<{
             </Tooltip>
           </SlideFade>
         )}
-        <SlideFade in={isOpen} offsetY="500px">
-          <Tooltip label="検索条件リセット" placement="left">
-            <IconButton
-              aria-label="reset"
-              icon={<DeleteIcon />}
-              onClick={() => {
-                onResetToggle();
-                onToggle();
-              }}
-            />
-          </Tooltip>
-        </SlideFade>
-        <SlideFade in={isOpen} offsetY="500px">
-          <Tooltip label="スライドショー開始" placement="left">
-            <IconButton aria-label="slideshow" icon={<SlideShowIcon />} />
-          </Tooltip>
-        </SlideFade>
-
+        {!hideReset && (
+          <SlideFade in={isOpen} offsetY="500px">
+            <Tooltip label="検索条件リセット" placement="left">
+              <IconButton
+                aria-label="reset"
+                icon={<DeleteIcon />}
+                onClick={() => {
+                  onResetToggle();
+                  onToggle();
+                }}
+              />
+            </Tooltip>
+          </SlideFade>
+        )}
+        {lightBox && (
+          <>
+            <SlideFade in={isOpen} offsetY="500px">
+              <Tooltip label="スライドショー開始" placement="left">
+                <IconButton
+                  aria-label="slideshow"
+                  onClick={() => {
+                    setSlideshow({ open: true, initial: 0 });
+                  }}
+                  icon={<SlideShowIcon />}
+                />
+              </Tooltip>
+            </SlideFade>
+            {lightBox(dataset, Slideshow, setSlideshow)}
+          </>
+        )}
         <Tooltip label="操作" placement="left">
           <IconButton
             onClick={onToggle}

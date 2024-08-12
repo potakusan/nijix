@@ -3,6 +3,9 @@ import SQLFuncWrapper from "..";
 import { HParamExplorerResultSet } from "@/types/api/hparams";
 
 export class HParamsExplorer extends SQLFuncWrapper {
+  protected favs: string[] | null = null;
+  setFavs = (input: string[]) => (this.favs = input);
+
   async get() {
     if (!this.con) return [];
 
@@ -13,6 +16,17 @@ export class HParamsExplorer extends SQLFuncWrapper {
 
     let conditions: string[] = [];
     let joins: string[] = ["FROM images i"];
+    if (this.favs && this.favs.length > 0) {
+      conditions.push(`
+        i.id IN (${this.favs
+          .reduce((res: string[], item) => {
+            if (!res) res = [];
+            res.push(this.e(item));
+            return res;
+          }, [])
+          .join(",")})
+      `);
+    }
 
     joins.push("JOIN sd_ratings sr ON i.id = sr.id");
     // Author and date conditions

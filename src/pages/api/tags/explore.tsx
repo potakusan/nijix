@@ -47,6 +47,9 @@ export default async function handler(
   i.setUntilDate(inputs.untilDate);
   i.setHParams(inputs.hParams);
   i.setAiMode(inputs.aiMode);
+  if (inputs.favs) {
+    i.setFavs(inputs.favs);
+  }
 
   const response = await i.get();
   i.destroy();

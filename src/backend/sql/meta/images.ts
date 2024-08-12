@@ -2,6 +2,11 @@ import { IllustAPI } from "../search/images";
 import { ConditionInputs } from "@/types/api/meta/images";
 
 export class IllustMetaAPI extends IllustAPI {
+  joins: string[] = [
+    "JOIN authors ON t.author_id = authors.author_id",
+    "JOIN images ON t.id = images.id  AND images.increment = 1",
+  ];
+
   setOverrideCols = () => (this.cols = ["COUNT(t.id) AS sum"]);
   makeConditions = (input: ConditionInputs) => {
     this.mkCommons();

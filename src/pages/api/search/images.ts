@@ -48,6 +48,7 @@ export default async function handler(
   i.setHParams(inputs.hParams);
   i.setSort(inputs.sort, inputs.seed);
   i.setAiMode(inputs.aiMode);
+  i.setIsSlideshow(inputs.isSlideshow);
 
   if (inputs.favs) {
     i.setFavs(inputs.favs);

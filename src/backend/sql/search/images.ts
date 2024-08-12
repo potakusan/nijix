@@ -20,6 +20,9 @@ export class IllustAPI extends SQLFuncWrapper {
     }
   }
 
+  protected isSlideshow: boolean = false;
+  setIsSlideshow = (input: boolean = false) => (this.isSlideshow = input);
+
   async execMethod() {
     if (!this.con) return;
     let query = this.gen();
@@ -37,7 +40,6 @@ export class IllustAPI extends SQLFuncWrapper {
   protected wheres: string[] = [];
   protected joins: string[] = [
     "JOIN authors ON t.author_id = authors.author_id",
-    "JOIN images ON t.id = images.id AND images.increment = 1",
   ];
 
   joinWhereConditions = () =>
@@ -54,7 +56,13 @@ export class IllustAPI extends SQLFuncWrapper {
       this.wheres = this.wheres.concat(input.wheres);
     }
     if (input.joins) {
-      this.joins = this.joins.concat(input.joins);
+      this.joins = this.joins.concat(input.joins).concat([
+        `  
+          JOIN images ON t.id = images.id ${
+            this.isSlideshow ? "" : "AND images.increment = 1"
+          }
+        `,
+      ]);
     }
   };
 
@@ -76,20 +84,6 @@ export class IllustAPI extends SQLFuncWrapper {
 
   protected mkCondHParams() {
     if (this.isHParamsChanged()) {
-      /*
-      [min,max]=
-      [0,25] : general
-      [0,50] : general,sensitive
-      [0,75] : general,sensitive,questionable
-      [0,100] : general,sensitive,questionable,explicit
-      [25,50] : sensitive
-      [25,75] : sensitive,questionable
-      [25,100] : sensitive,questionable,explicit
-      [50,75] : questionable
-      [50,100] : questionable,explicit
-      [75,100] : explicit
-
-      */
       if (!this.hparams) return;
       let conditions: string[] = [];
       const allColumns = [

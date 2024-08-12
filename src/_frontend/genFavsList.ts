@@ -17,6 +17,7 @@ export const getFavsId = (page: number = 1, full: boolean = false) => {
       group.push(item.id);
       return group;
     }, []);
+  if (g.length === 0) return ["_"];
   return full
     ? m
     : m.slice(
