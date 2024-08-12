@@ -12,6 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useClipboard,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -25,6 +26,8 @@ export const ShareModal: FC<{
 }> = ({ isOpen, onShareToggle, _artist }) => {
   const [id, setId] = useState<string>("");
   const router = useRouter();
+  const fURL = GLOBAL_BASEURL + "f/" + id;
+  const { onCopy, hasCopied } = useClipboard(fURL);
 
   const loader = async () => {
     const ids = getFavsList();
@@ -58,18 +61,18 @@ export const ShareModal: FC<{
             <Input
               pr="4.5rem"
               readOnly
-              value={GLOBAL_BASEURL + "f/" + id}
+              value={fURL}
               placeholder="https://nyaa.ltd/f/"
             />
             <InputRightElement width="4.5rem">
               <Button
                 h="1.75rem"
                 size="sm"
-                onClick={() => null}
+                onClick={onCopy}
                 variant="solid"
                 colorScheme="facebook"
               >
-                コピー
+                {hasCopied ? `Copied` : `Copy`}
               </Button>
             </InputRightElement>
           </InputGroup>

@@ -117,7 +117,12 @@ const Header = () => {
         </Heading>
       </Box>
       {LightBox(undefined, Slideshow, setSlideshow)}
-      <NavBarButton onFavouriteShares dataset={[]} lightBox={LightBox} />
+      <NavBarButton
+        onFavouriteShares
+        hideFavourite
+        dataset={[]}
+        lightBox={LightBox}
+      />
     </PageHead>
   );
 };
