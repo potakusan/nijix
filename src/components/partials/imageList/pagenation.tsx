@@ -6,19 +6,17 @@ import { MetaImageResult } from "@/types/api/meta/images";
 import { fetcher } from "@/_frontend/fetch";
 import { useRouter } from "next/router";
 import ResponsivePagination from "react-responsive-pagination";
-import "react-responsive-pagination/themes/classic.css";
 import { ImageList } from "./list";
 import { SearchImageResult } from "@/types/api/search/images";
 import { GLOBAL_ITEM_NUMBERS_PER_PAGE } from "../../../../_config/config";
 import { useSearchParams } from "next/navigation";
 import { queryGenerator } from "@/_frontend/queryGenerator";
 import { Box } from "@chakra-ui/react";
-import { getFavsId } from "@/_frontend/genFavsList";
 
-export const PagingWrapper: FC<{ artist?: string; favourite?: boolean }> = ({
-  artist,
-  favourite,
-}) => {
+export const PagingWrapper: FC<{
+  artist?: string;
+  favourite?: string[];
+}> = ({ artist, favourite }) => {
   const router = useRouter();
   const { tag, noun } = router.query;
   const [currentPage, setCurrentPage] = useState<number | null>(null);
@@ -30,7 +28,7 @@ export const PagingWrapper: FC<{ artist?: string; favourite?: boolean }> = ({
     `hparams=${params.get("hparams") || ""}`,
   ];
   if (artist) qs.push(`authorId=${artist}`);
-  if (favourite) qs.push(`favs=${getFavsId(1, true).join(",")}`);
+  if (favourite) qs.push(`favs=${favourite}`);
   const { data, error, isLoading } = useSWR<MetaImageResult>(
     (tag && noun) || artist || favourite
       ? `/meta/images?${queryGenerator(qs)}`
@@ -48,8 +46,7 @@ export const PagingWrapper: FC<{ artist?: string; favourite?: boolean }> = ({
     `offset=${(Number(currentPage || 1) - 1) * GLOBAL_ITEM_NUMBERS_PER_PAGE}`,
   ];
   if (artist) qt.push(`authorId=${artist}`);
-  if (favourite)
-    qt.push(`favs=${getFavsId(Number(currentPage || 1), true).join(",")}`);
+  if (favourite) qt.push(`favs=${favourite}`);
 
   const {
     data: listBody,
@@ -103,7 +100,7 @@ const PagingComponent: FC<{
   setCurrentPage: (e: number) => void;
   listLoading: boolean;
   artist?: string;
-  favourite?: boolean;
+  favourite?: string[];
 }> = ({
   data,
   currentPage,

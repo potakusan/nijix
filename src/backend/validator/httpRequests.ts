@@ -2,10 +2,11 @@ import { MetaImageResult } from "@/types/api/meta/images";
 import { ImageResultSet, SearchImageResult } from "@/types/api/search/images";
 import { TagExplorerResultSet } from "@/types/api/tags/explore";
 import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 
 export const checkHTTPRequests = (
-  req: NextApiRequest,
-  validRequest: "get" | "post" | "update" | "delete"
+  req: NextApiRequest | NextRequest,
+  validRequest: "get" | "post" | "update" | "delete" | "put"
 ): {
   isValidReuest: boolean;
   requestErrorMessage: string;
