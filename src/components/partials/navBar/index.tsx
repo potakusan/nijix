@@ -43,7 +43,7 @@ export const NavBarButton: FC<{
     initial: 0,
   });
   return (
-    <Box position="fixed" bottom="2" right="2">
+    <Box position="fixed" bottom="2" right="2" zIndex={3}>
       <VStack>
         {onFavouriteShares && (
           <SlideFade in={isOpen} offsetY="500px">
