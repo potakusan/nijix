@@ -4,10 +4,11 @@ import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { FC } from "react";
 
-export const AIChoice: FC<{ artist?: string; favourite?: string[] }> = ({
-  artist,
-  favourite,
-}) => {
+export const AIChoice: FC<{
+  artist?: string;
+  favourite?: string[];
+  sharedId?: string;
+}> = ({ artist, favourite, sharedId }) => {
   const router = useRouter();
   const params = useSearchParams();
   const current = params.has("aiMode") ? Number(params.get("aiMode")) : 2;
@@ -42,7 +43,13 @@ export const AIChoice: FC<{ artist?: string; favourite?: string[] }> = ({
             w="100%"
             href={
               `/${
-                artist ? `artist/${artist}` : favourite ? `favourite` : `search`
+                sharedId
+                  ? `f/${sharedId}`
+                  : artist
+                  ? `artist/${artist}`
+                  : favourite
+                  ? `favourite`
+                  : `search`
               }/${router.query.tag}/${router.query.noun}/${router.query.page}` +
               getUpdatedSearchParams(params, {
                 key: "aiMode",

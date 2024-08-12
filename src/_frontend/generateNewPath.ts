@@ -7,7 +7,8 @@ export const generateNewPath = (
   newTag: string | null = null,
   newNoun: string | null = null,
   artist?: string,
-  favourite?: boolean
+  favourite?: boolean,
+  sharedId?: string
 ): string => {
   let tags = tag === "_" ? [] : tag.split(",");
   let nouns = noun === "_" ? [] : noun.split(",");
@@ -25,6 +26,11 @@ export const generateNewPath = (
     } else {
       nouns = nouns.filter((item) => item !== newNoun);
     }
+  }
+  if (sharedId) {
+    return `/f/${sharedId}/${tags.length === 0 ? "_" : tags.join(",")}/${
+      nouns.length === 0 ? "_" : nouns.join(",")
+    }/1?${searches.toString()}`;
   }
   if (favourite) {
     return `/favourite/${tags.length === 0 ? "_" : tags.join(",")}/${

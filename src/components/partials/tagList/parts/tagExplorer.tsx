@@ -33,7 +33,8 @@ export const TagExplorer: FC<{
   _noun?: boolean;
   artist?: string;
   favourite?: string[];
-}> = ({ _tag, _noun, artist, favourite }) => {
+  sharedId?: string;
+}> = ({ _tag, _noun, artist, favourite, sharedId }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
@@ -75,7 +76,8 @@ export const TagExplorer: FC<{
       _tag ? newTag : null,
       _noun ? newTag : null,
       artist,
-      !!favourite
+      !!favourite,
+      sharedId
     );
   const isExists = (current: string) => {
     if (_tag) {

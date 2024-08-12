@@ -16,7 +16,8 @@ import { Box } from "@chakra-ui/react";
 export const PagingWrapper: FC<{
   artist?: string;
   favourite?: string[];
-}> = ({ artist, favourite }) => {
+  sharedId?: string;
+}> = ({ artist, favourite, sharedId }) => {
   const router = useRouter();
   const { tag, noun } = router.query;
   const [currentPage, setCurrentPage] = useState<number | null>(null);
@@ -70,6 +71,7 @@ export const PagingWrapper: FC<{
       {!error && !isLoading && data && (
         <PagingComponent
           artist={artist}
+          sharedId={sharedId}
           favourite={favourite}
           currentPage={currentPage || 1}
           setCurrentPage={setCurrentPage}
@@ -101,6 +103,7 @@ const PagingComponent: FC<{
   listLoading: boolean;
   artist?: string;
   favourite?: string[];
+  sharedId?: string;
 }> = ({
   data,
   currentPage,
@@ -108,6 +111,7 @@ const PagingComponent: FC<{
   listLoading,
   artist,
   favourite,
+  sharedId,
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -141,7 +145,13 @@ const PagingComponent: FC<{
           if (listLoading) return;
           router.push(
             `/${
-              artist ? `artist/${artist}` : favourite ? `favourite` : `search`
+              sharedId
+                ? `f/${sharedId}`
+                : artist
+                ? `artist/${artist}`
+                : favourite
+                ? `favourite`
+                : `search`
             }/${router.query.tag || "_"}/${router.query.noun || "_"}/${String(
               page
             )}?${searchParams.toString()}`

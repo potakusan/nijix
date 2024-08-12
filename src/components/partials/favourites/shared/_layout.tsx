@@ -51,20 +51,20 @@ export const MyPageLayout = () => {
     group.push(item.id);
     return group;
   }, []);
-  console.log(qlen, qlen, rawIds);
+  const id = router.query.id as string;
   return (
     <>
       <Header len={qlen.body.length} rawIds={rawIds} />
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
         <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
           <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
-            <ConditionsSelector favourite={rawIds} />
+            <ConditionsSelector favourite={rawIds} sharedId={id} />
           </GridItem>
           <GridItem colSpan={{ base: 12, sm: 12, md: 9, lg: 10 }}>
             {rawIds.filter((item: string) => item !== "_").length === 0 ? (
               <Error />
             ) : (
-              <PagingWrapper favourite={rawIds} />
+              <PagingWrapper favourite={rawIds} sharedId={id} />
             )}
           </GridItem>
         </Grid>

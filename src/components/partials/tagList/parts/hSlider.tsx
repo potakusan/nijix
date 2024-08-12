@@ -9,10 +9,11 @@ import { HParamExplorerResult } from "@/types/api/hparams";
 import { queryGenerator } from "@/_frontend/queryGenerator";
 import { fetcher } from "@/_frontend/fetch";
 
-export const HSlider: FC<{ artist?: string; favourite?: string[] }> = ({
-  artist,
-  favourite,
-}) => {
+export const HSlider: FC<{
+  artist?: string;
+  favourite?: string[];
+  sharedId?: string;
+}> = ({ artist, favourite, sharedId }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
@@ -71,7 +72,9 @@ export const HSlider: FC<{ artist?: string; favourite?: string[] }> = ({
                 }
                 router.push(
                   `/${
-                    artist
+                    sharedId
+                      ? `f/${sharedId}`
+                      : artist
                       ? `artist/${artist}`
                       : favourite
                       ? `favourite`
