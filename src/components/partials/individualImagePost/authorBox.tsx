@@ -40,19 +40,31 @@ export default function ArtistBox() {
   ) {
     return null;
   }
-  const text = data.body.m[0].text.replace(
+  let text = data.body.m[0].text.replace(
     /https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/g,
     ""
   );
-  window.document.title = `${text} | ${data.body.m[0].username}さんのイラスト - NijiX`;
+  if (!text || text.length === 0) {
+    text = "無題";
+  }
   return (
     <Box mt={4}>
       <Head>
+        <title>
+          {`${text} | ${data.body.m[0].username}さんのイラスト - NijiX`}
+        </title>
         <meta
           name="description"
           content={
             router.isReady
-              ? `${text} - ${data.body.m[0].username}さんのイラストからAIを使った特徴分析で関連画像を検索できます`
+              ? `${text || "無題"} - ${
+                  data.body.m[0].username
+                }さんのイラストからAIを使った特徴分析で関連画像を検索できます。${(
+                  data.body.m[0].tags || "[]"
+                )
+                  .split(",")
+                  .concat((data.body.m[0].nouns || "[]").split(","))
+                  .join(",")}に関するエロ画像を検索。`
               : ""
           }
         />
@@ -95,9 +107,20 @@ export default function ArtistBox() {
             </Heading>
           </Box>
           {data.body.m && data.body.m.length > 0 && (
-            <Text as="h1" my={3} color="blue.300" fontSize="sm">
-              {text}
-            </Text>
+            <>
+              <Text as="h1" my={3} color="blue.300" fontSize="sm">
+                {text}
+              </Text>
+              <Text
+                as="p"
+                textAlign={"right"}
+                my={3}
+                color="blue.300"
+                fontSize="sm"
+              >
+                {data.body.m[0].added_at}
+              </Text>
+            </>
           )}
           <Divider m={4} />
           <Box mt={4} display="block" className="authorImages">
