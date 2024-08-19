@@ -8,10 +8,14 @@ import "react-responsive-pagination/themes/classic.css";
 import type { AppProps } from "next/app";
 
 import { ChakraProvider } from "@chakra-ui/react";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
+      <Head>
+        <title>NijiX</title>
+      </Head>
       <Component {...pageProps} />
     </ChakraProvider>
   );

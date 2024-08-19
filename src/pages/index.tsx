@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <Wrapper>
       <>
-        <Container maxW={"3xl"}>
+        <Container maxW={"5xl"}>
           <Stack
             as={Box}
             textAlign={"center"}
@@ -42,13 +42,19 @@ export default function Home() {
                 fap materials
               </Text>
             </Heading>
-            <Heading size="md">
-              XなどにアップロードされたイラストをAIでタグ付けして横断検索できます。
+            <Heading size="sm">
+              NijiX is a platform that tags illustrations uploaded to platforms
+              like X,by using AI.
+              <br />
+              Enabling cross-search by tags like character traits, clothing, and
+              situations!
             </Heading>
             <Text fontSize="sm">
-              *イラストは引用形式で掲載しており、ユーザー環境で作者が削除/非公開にしているか検証しています。
+              All illustrations are on in a citation format, and the
+              availability of the original images is constantly verified.
               <br />
-              作者が非表示にしたポストは、当サイトでも利用できない状態になります。
+              Arts that the creator has hidden will also become unavailable on
+              our site.
             </Text>
             <Text color={"gray.500"}></Text>
             <Stack
@@ -148,6 +154,8 @@ export const TopSlider: FC<{ component?: "a" }> = ({ component }) => {
                       }}
                     >
                       <Image
+                        alt={item.text}
+                        title={item.text}
                         borderRadius={"20px"}
                         src={item.px_thumb || item.backup_saved_url}
                         onError={(e) =>

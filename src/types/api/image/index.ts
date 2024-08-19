@@ -18,4 +18,5 @@ export type ImageListResultSet = {
   backup_saved_url: string;
   px_thumb: string | null;
   increment: number;
+  text: string;
 };

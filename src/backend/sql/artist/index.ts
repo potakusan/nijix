@@ -12,7 +12,8 @@ export class IndividualArtistAPI extends SQLFuncWrapper {
     if (!this.con) return [];
     if (!this.id) return [];
     const [rows, _fields] = await this.con.execute<ArtistMetaResultSet[]>(`
-      SELECT au.*,im.id,im.url,im.backup_saved_url,im.px_thumb FROM authors AS au
+      SELECT au.*,im.id,im.url,im.backup_saved_url,im.px_thumb,tw.text
+      FROM authors AS au
       JOIN (SELECT tw.* FROM tweets AS tw WHERE tw.id = ${this.e(
         this.id
       )} LIMIT 1) AS tw1 ON tw1.author_id = au.author_id

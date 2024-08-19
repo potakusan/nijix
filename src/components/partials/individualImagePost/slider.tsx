@@ -76,6 +76,8 @@ const Carousel: FC<{ setError: (input: boolean) => void }> = ({ setError }) => {
         ) : (
           data?.body.map((item, index) => (
             <Image
+              alt={item.text}
+              title={item.text}
               onClick={() => setSlideshow({ open: true, initial: index })}
               src={item.backup_saved_url}
               key={index}

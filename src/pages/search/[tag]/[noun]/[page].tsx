@@ -12,10 +12,11 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useEffect } from "react";
 
 export default function SearchByTagAndNouns() {
   const router = useRouter();
@@ -27,6 +28,23 @@ export default function SearchByTagAndNouns() {
       type === "noun" ? input : "_"
     }/1?${params.toString()}`;
   };
+  const tags = ((router.query.tag as string) || "")
+    .split(",")
+    .filter((item) => item !== "_");
+  const nouns = ((router.query.noun as string) || "")
+    .split(",")
+    .filter((item) => item !== "_");
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (tags.length > 0 || nouns.length > 0) {
+      window.document.title = `${tags
+        .concat(nouns)
+
+        .join(",")}に関連するエロ画像(${router.query.page}ページ) - NijiX`;
+    } else {
+      window.document.title = `エロ画像検索(${router.query.page}ページ) - NijiX`;
+    }
+  }, [router.isReady, tag, noun, router.query.page, tags, nouns]);
 
   const fil = (str: string) =>
     str
@@ -35,6 +53,21 @@ export default function SearchByTagAndNouns() {
       .filter((item) => item !== "");
   return (
     <Wrapper>
+      <Head>
+        <meta
+          name="description"
+          content={
+            router.isReady
+              ? `${tags
+                  .concat(nouns)
+                  .filter((item) => item !== "_")
+                  .join(
+                    ","
+                  )}に関連するエロ画像を多数掲載。AIを使った特徴分類で理想のイラストを簡単に見つけられます。`
+              : ""
+          }
+        />
+      </Head>
       <PageHead>
         <Heading
           fontWeight={600}
@@ -84,7 +117,7 @@ export default function SearchByTagAndNouns() {
               fil(noun as string).length === 0 ? (
                 <>50万枚以上のえっちなイラストを探索する</>
               ) : (
-                <>のイラスト</>
+                <>のエロ画像</>
               )}
             </>
           ) : (

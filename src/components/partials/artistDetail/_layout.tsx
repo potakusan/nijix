@@ -93,6 +93,16 @@ const Header = () => {
   if (!isLoading && !data) {
     return null; //404
   }
+  if (router.query.tag || router.query.noun) {
+    const tags = (router.query.tag as string).split(",");
+    const nouns = (router.query.noun as string).split(",");
+    window.document.title = `${tags
+      .concat(nouns)
+      .filter((item) => item !== "_")
+      .join(",")}に関連する${data.body.username}さんのイラスト - NijiX`;
+  } else {
+    window.document.title = `${data.body.username}さんのイラスト - NijiX`;
+  }
   return (
     <PageHead>
       <Box>

@@ -73,6 +73,8 @@ export default function RelatedImages() {
                         }}
                       >
                         <Image
+                          alt={item.text}
+                          title={item.text}
                           borderRadius={"20px"}
                           src={item.px_thumb || item.backup_saved_url}
                           onError={(e) =>

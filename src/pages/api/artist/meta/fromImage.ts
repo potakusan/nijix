@@ -1,5 +1,6 @@
 import { IndividualImageRequestFormatter } from "@/backend/requests/individualImageRequest";
 import { IndividualArtistAPI } from "@/backend/sql/artist";
+import { IndividualIllustAPI } from "@/backend/sql/image";
 import {
   checkHTTPRequests,
   makeError,
@@ -18,6 +19,7 @@ export default async function handler(
     return res.status(403).json(makeError(requestErrorMessage, 0));
   }
   const i = await new IndividualArtistAPI().connect();
+  const m = await new IndividualIllustAPI().connect();
 
   const { success, inputs } = IndividualImageRequestFormatter(
     req.query as CommonQueries
@@ -27,9 +29,16 @@ export default async function handler(
   }
 
   const response = await i.setId(inputs.id).execMethod();
+  const meta = await m.setId(inputs.id).execMethod();
   i.destroy();
+  m.destroy();
   if (response) {
-    return res.status(200).json(makeSuccess(response));
+    return res.status(200).json(
+      makeSuccess({
+        r: response,
+        m: meta,
+      })
+    );
   } else {
     return res.status(500).json(makeError("REPONSE DATA IS NULL", 0));
   }

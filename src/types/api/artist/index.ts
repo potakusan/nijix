@@ -1,4 +1,5 @@
 import { RowDataPacket } from "mysql2";
+import { ImageResultSet } from "../search/images";
 
 export type ArtistMetaResultType1 = {
   error: boolean;
@@ -9,7 +10,7 @@ export type ArtistMetaResultType1 = {
 export type ArtistMetaResultType = {
   error: boolean;
   errorMessage?: string;
-  body: ArtistMetaResultSet[];
+  body: { m: ArtistMetaResultSet[]; r: ImageResultSet[] };
 };
 
 export interface ArtistMetaResultSet extends RowDataPacket {
@@ -24,4 +25,5 @@ export interface ArtistMetaResultSet extends RowDataPacket {
   backup_saved_url?: string;
   px_thumb?: string;
   tweetCount?: number;
+  text: string;
 }

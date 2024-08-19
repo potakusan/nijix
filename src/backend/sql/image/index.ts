@@ -14,7 +14,9 @@ export class IndividualIllustAPI extends SQLFuncWrapper {
     if (!this.con) return [];
     if (!this.id) return [];
     const [rows, _fields] = await this.con.execute<ImageResultSet[]>(`
-      SELECT * FROM images AS im
+      SELECT im.*,tw.text,au.username FROM images AS im
+      JOIN tweets tw ON im.id = tw.id
+      JOIN authors au ON au.author_id = tw.author_id
       WHERE im.id = ${this.e(this.id)}
       ORDER BY increment asc;
     `);
