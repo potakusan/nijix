@@ -26,12 +26,8 @@ export class IndividualArtistAPI extends SQLFuncWrapper {
   async getMeta() {
     if (!this.con) return null;
     if (!this.authorId) return null;
-    const query = `SELECT authors.*,tweetCount FROM authors
-    JOIN (SELECT author_id,COUNT(*) AS tweetCount FROM tweets
-      WHERE author_id = ${this.e(
-        this.authorId
-      )} GROUP BY author_id) tw ON authors.author_id = tw.author_id
-    WHERE authors.author_id = ${this.e(this.authorId)}`;
+    const query = `SELECT authors.* FROM authors
+    WHERE author_id = ${this.e(this.authorId)}`;
     const [rows, _fields] = await this.con.execute<ArtistMetaResultSet[]>(
       query
     );

@@ -7,8 +7,9 @@ import {
   GridItem,
   Heading,
   Text,
+  Link as RLink,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { TopSlider } from "@/pages";
 import { useRouter } from "next/router";
@@ -20,6 +21,8 @@ import { ArtistMetaResultType1 } from "@/types/api/artist";
 import { queryGenerator } from "@/_frontend/queryGenerator";
 import { fetcher } from "@/_frontend/fetch";
 import { NavBarButton } from "../navBar";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export const IndividualArtistLayout = () => {
   const router = useRouter();
@@ -80,8 +83,17 @@ const Error = () => {
 
 const Header = () => {
   const router = useRouter();
+  const params = useSearchParams();
   const { id } = router.query;
-  const qs = [`id=${id || "_"}`];
+  const { tag, noun } = router.query;
+  const qs = [
+    `authorId=${id || "_"}`,
+    `sort=${params.get("sort") || "created_at,desc"}`,
+    `aiMode=${params.get("aiMode")}`,
+    `tags=${tag || ""}`,
+    `nouns=${noun || ""}`,
+    `hparams=${params.get("hparams") || ""}`,
+  ];
   const { data, error, isLoading } = useSWR<ArtistMetaResultType1>(
     id ? `/artist/meta?${queryGenerator(qs)}` : null,
     fetcher
@@ -103,6 +115,18 @@ const Header = () => {
   } else {
     window.document.title = `${data.body.username}さんのイラスト - NijiX`;
   }
+  const fil = (str: string) =>
+    str
+      .replace(/_/g, "")
+      .split(",")
+      .filter((item) => item !== "");
+
+  const pathGenerator = (type: "tag" | "noun", input: string) => {
+    return `/artist/${id}/${type === "tag" ? input : "_"}/${
+      type === "noun" ? input : "_"
+    }/1?${params.toString()}`;
+  };
+
   return (
     <PageHead>
       <Box>
@@ -112,7 +136,59 @@ const Header = () => {
           fontSize={{ base: "2xl", sm: "4xl", md: "4xl" }}
           lineHeight={"110%"}
         >
-          {data.body.username}さんのイラスト({data.body.tweetCount}枚)
+          {router.isReady ? (
+            <>
+              {fil(tag as string).map((item, i) => {
+                const path = pathGenerator("tag", item);
+                return (
+                  <Fragment key={i}>
+                    <RLink
+                      as={Link}
+                      key={item}
+                      href={path}
+                      color="blue.200"
+                      textDecoration={"underline"}
+                    >
+                      {item}
+                    </RLink>
+                    {i !== fil(tag as string).length - 1 && <>・</>}
+                  </Fragment>
+                );
+              })}
+              {fil(tag as string).length > 0 &&
+                fil(noun as string).length > 0 && <>・</>}
+              {fil(noun as string).map((item, i) => {
+                const path = pathGenerator("noun", item);
+                return (
+                  <Fragment key={i}>
+                    <RLink
+                      as={Link}
+                      key={item}
+                      href={path}
+                      color="blue.200"
+                      textDecoration={"underline"}
+                    >
+                      {item}
+                    </RLink>
+                    {i !== fil(noun as string).length - 1 && <>・</>}
+                  </Fragment>
+                );
+              })}
+              {fil(tag as string).length === 0 &&
+              fil(noun as string).length === 0 ? (
+                <>
+                  {data.body.username}さんのイラスト({data.body.tweetCount}枚)
+                </>
+              ) : (
+                <>
+                  に関連する{data.body.username}さんのイラスト(
+                  {data.body.tweetCount}枚)
+                </>
+              )}
+            </>
+          ) : (
+            <>&nbsp;</>
+          )}
         </Heading>
       </Box>
       <NavBarButton _artist={(id as string) || ""} />

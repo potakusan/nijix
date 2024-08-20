@@ -72,7 +72,6 @@ export const SearchRequestFormatter = (queries: {
   if (queries.favs) {
     inputs.favs = queries.favs.split(",");
   }
-  console.log(queries.isSlideshow);
   if (queries.isSlideshow) {
     inputs.isSlideshow = true;
   }

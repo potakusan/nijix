@@ -255,14 +255,9 @@ const NAV_ITEMS: Array<NavItem> = [
     label: "イラストを探す",
     children: [
       {
-        label: "作品から探す",
-        subLabel: "作品別にイラストを探します。",
-        href: "#",
-      },
-      {
-        label: "タグから探す",
-        subLabel: "キャラクター名/特徴/ポージングなどの特徴タグから探します。",
-        href: "#",
+        label: "キャラクターから探す",
+        subLabel: "キャラクター名からイラストを探します。",
+        href: "/character",
       },
       {
         label: "全て表示",
