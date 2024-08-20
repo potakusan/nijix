@@ -107,7 +107,7 @@ const CharacterList = () => {
       {Object.keys(obj).map((item) => {
         const title = item;
         const items = obj[title];
-        if (items.length < 10) return null;
+        if (items.length < 2) return null;
         return (
           <Fragment key={title}>
             <Heading fontSize="xl" my={4}>
