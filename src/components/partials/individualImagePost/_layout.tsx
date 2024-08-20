@@ -65,7 +65,7 @@ const Error = () => {
           404 Not Found
         </Heading>
         <Text color={"gray.500"}>
-          The file you have requested did not found.
+          The file you have requested did not exist.
           <br />
         </Text>
       </Box>
