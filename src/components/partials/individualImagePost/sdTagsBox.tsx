@@ -11,6 +11,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from "@chakra-ui/react";
 import useSWR from "swr";
 import { useRouter } from "next/router";
@@ -28,7 +29,24 @@ export default function SDTagsBox() {
   if (error) return <>Error</>;
   if (isLoading || !data) return <SkeletonSDTagsBox />;
   if (!isLoading && (!data || data.body.tags.length === 0)) {
-    return null;
+    return (
+      <Box mt={4}>
+        <Card>
+          <CardHeader pb={1}>
+            <Heading size="md">AI Report</Heading>
+          </CardHeader>
+          <CardBody pt={0}>
+            <Text fontSize="sm" my={4}>
+              AI分析結果は現在作成中です。
+              <br />
+              画像をクロール後最大24時間でレポートが作成されます。
+              <br />
+              <br />* レポートが作成されるまでタグ機能などが利用できません
+            </Text>
+          </CardBody>
+        </Card>
+      </Box>
+    );
   }
   const toPercentage = (number: number) => Number(number.toFixed(4)) * 100;
 
