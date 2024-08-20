@@ -21,12 +21,26 @@ import {
   ChevronRightIcon,
 } from "@chakra-ui/icons";
 import Link from "next/link";
+import Script from "next/script";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
     <Box>
+      <Script
+        async
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-EZV35V0621"
+      />
+      <Script id="ga" strategy="afterInteractive">
+        {`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-EZV35V0621');`}
+      </Script>
       <Flex
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}

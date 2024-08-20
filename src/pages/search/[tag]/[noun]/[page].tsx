@@ -142,18 +142,20 @@ export default function SearchByTagAndNouns() {
 
 export const PageHead: FC<{ children: any }> = ({ children }) => {
   return (
-    <Stack
-      as={Box}
-      sx={{
-        borderBottom: "1px solid #ddd",
-        background: useColorModeValue("gray.800", "gray.800"),
-        color: "#fff",
-      }}
-      textAlign={"center"}
-      spacing={{ base: 8, md: 14 }}
-      py={{ base: 12, md: 8, lg: 12, xl: 20 }}
-    >
-      {children}
-    </Stack>
+    <>
+      <Stack
+        as={Box}
+        sx={{
+          borderBottom: "1px solid #ddd",
+          background: useColorModeValue("gray.800", "gray.800"),
+          color: "#fff",
+        }}
+        textAlign={"center"}
+        spacing={{ base: 8, md: 14 }}
+        py={{ base: 12, md: 8, lg: 12, xl: 20 }}
+      >
+        {children}
+      </Stack>
+    </>
   );
 };
