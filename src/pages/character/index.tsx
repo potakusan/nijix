@@ -3,6 +3,7 @@ import { IndividualImagePostLayout } from "@/components/partials/individualImage
 import SearchInput from "@/components/partials/searchInput";
 import {
   Box,
+  Card,
   Container,
   Divider,
   Heading,
@@ -19,6 +20,7 @@ import useSWR from "swr";
 import { CharacterTypeResult } from "@/types/api/character";
 import RLink from "next/link";
 import { Fragment } from "react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export default function IndividualImagePage() {
   return (
@@ -104,12 +106,32 @@ const CharacterList = () => {
   );
   return (
     <>
+      <Box>
+        <Card p={4} my={8}>
+          <Heading mb={4} fontSize="md">
+            作品索引
+          </Heading>
+          <HStack flexWrap={"wrap"} spacing={4}>
+            {Object.keys(obj).map((item) => {
+              const title = item;
+              const items = obj[title];
+              if (items.length < 2) return null;
+              return (
+                <Link key={title} href={"#" + title} color="teal.600">
+                  <ChevronDownIcon />
+                  {title}
+                </Link>
+              );
+            })}
+          </HStack>
+        </Card>
+      </Box>
       {Object.keys(obj).map((item) => {
         const title = item;
         const items = obj[title];
         if (items.length < 2) return null;
         return (
-          <Fragment key={title}>
+          <Box key={title} id={title}>
             <Heading fontSize="xl" my={4}>
               {title}
             </Heading>
@@ -131,7 +153,7 @@ const CharacterList = () => {
               })}
             </HStack>
             <Divider my={4} />
-          </Fragment>
+          </Box>
         );
       })}
     </>
