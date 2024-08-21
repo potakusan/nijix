@@ -108,12 +108,17 @@ const Header = () => {
   if (router.query.tag || router.query.noun) {
     const tags = (router.query.tag as string).split(",");
     const nouns = (router.query.noun as string).split(",");
-    window.document.title = `${tags
-      .concat(nouns)
-      .filter((item) => item !== "_")
-      .join(",")}に関連する${data.body.username}さんのイラスト - NijiX`;
-  } else {
-    window.document.title = `${data.body.username}さんのイラスト - NijiX`;
+    const ts = tags.concat(nouns).filter((item) => item !== "_");
+
+    if (ts.length > 0) {
+      window.document.title = `${ts.join(",")}に関連する${
+        data.body.source === "twitter" ? "@" : ""
+      }${data.body.username}さんのイラスト - NijiX`;
+    } else {
+      window.document.title = `${data.body.source === "twitter" ? "@" : ""}${
+        data.body.username
+      }さんのイラスト - NijiX`;
+    }
   }
   const fil = (str: string) =>
     str
@@ -177,11 +182,13 @@ const Header = () => {
               {fil(tag as string).length === 0 &&
               fil(noun as string).length === 0 ? (
                 <>
+                  {data.body.source === "twitter" ? "@" : ""}
                   {data.body.username}さんのイラスト({data.body.tweetCount}枚)
                 </>
               ) : (
                 <>
-                  に関連する{data.body.username}さんのイラスト(
+                  に関連する{data.body.source === "twitter" ? "@" : ""}
+                  {data.body.username}さんのイラスト(
                   {data.body.tweetCount}枚)
                 </>
               )}
