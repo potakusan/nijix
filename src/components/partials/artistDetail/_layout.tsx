@@ -106,21 +106,9 @@ const Header = () => {
   if (!isLoading && !data) {
     return null; //404
   }
-  if (router.query.tag || router.query.noun) {
-    const tags = (router.query.tag as string).split(",");
-    const nouns = (router.query.noun as string).split(",");
-    const ts = tags.concat(nouns).filter((item) => item !== "_");
-
-    if (ts.length > 0) {
-      window.document.title = `${ts.join(",")}に関連する${
-        data.body.source === "twitter" ? "@" : ""
-      }${data.body.username}さんのイラスト - NijiX`;
-    } else {
-      window.document.title = `${data.body.source === "twitter" ? "@" : ""}${
-        data.body.username
-      }さんのイラスト - NijiX`;
-    }
-  }
+  const tags = (router.query.tag as string).split(",");
+  const nouns = (router.query.noun as string).split(",");
+  const ts = tags.concat(nouns).filter((item) => item !== "_");
   const fil = (str: string) =>
     str
       .replace(/_/g, "")
@@ -135,16 +123,31 @@ const Header = () => {
 
   return (
     <PageHead>
-      <Head>
-        <meta
-          name="description"
-          content={`${data.body.source === "twitter" ? "@" : ""}${
-            data.body.username
-          }さんのイラストをAIを使って分類・収集。${data.body.availableTags.join(
-            ","
-          )}のイラストを簡単に検索できます。`}
-        />
-      </Head>
+      {router.isReady && (
+        <Head>
+          <meta
+            name="description"
+            content={`${data.body.source === "twitter" ? "@" : ""}${
+              data.body.username
+            }さんのイラストをAIを使って分類・収集。${data.body.availableTags.join(
+              ","
+            )}のイラストを簡単に検索できます。`}
+          />
+          <title>
+            {ts.length > 0
+              ? `${ts.join(",")}を含む${
+                  data.body.source === "twitter" ? "@" : ""
+                }${data.body.username}さんのイラスト(${
+                  router.query.page
+                }ページ) - NijiX`
+              : (window.document.title = `${
+                  data.body.source === "twitter" ? "@" : ""
+                }${data.body.username}さんのイラスト(${
+                  router.query.page
+                }ページ) - NijiX`)}
+          </title>
+        </Head>
+      )}
       <Box>
         <Heading
           fontWeight={600}
