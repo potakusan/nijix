@@ -26,4 +26,5 @@ export interface ArtistMetaResultSet extends RowDataPacket {
   px_thumb?: string;
   tweetCount?: number;
   text: string;
+  availableTags: string[];
 }

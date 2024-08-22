@@ -23,6 +23,7 @@ import { fetcher } from "@/_frontend/fetch";
 import { NavBarButton } from "../navBar";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Head from "next/head";
 
 export const IndividualArtistLayout = () => {
   const router = useRouter();
@@ -134,6 +135,16 @@ const Header = () => {
 
   return (
     <PageHead>
+      <Head>
+        <meta
+          name="description"
+          content={`${data.body.source === "twitter" ? "@" : ""}${
+            data.body.username
+          }さんのイラストをAIを使って分類・収集。${data.body.availableTags.join(
+            ","
+          )}のイラストを簡単に検索できます。`}
+        />
+      </Head>
       <Box>
         <Heading
           fontWeight={600}
