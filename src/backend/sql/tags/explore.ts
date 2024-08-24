@@ -99,8 +99,15 @@ export class TagExplorer extends SQLFuncWrapper {
 
     const whereClause =
       conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-
-    const query = `
+    const query =
+      conditions.length === 0 && joins.length === 1
+        ? `
+      SELECT COUNT(*) AS num, t.tag
+      FROM ${this.view === "tags" ? "tags" : "noun_tags"} AS t
+      GROUP BY t.tag
+      ORDER BY num DESC
+      LIMIT ${Number(this.limit)} OFFSET ${Number(this.offset)}`
+        : `
       WITH filtered_images AS (
         SELECT DISTINCT i.id
         ${joins.join(" ")}
