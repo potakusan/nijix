@@ -33,9 +33,28 @@ export class IndividualIllustAPI extends SQLFuncWrapper {
     if (!this.con) return [];
     if (!this.id) return [];
     return this.con.execute<RawTagsType[]>(`
-      SELECT tags.id,tags.tag,tags.reading,counts.count FROM ${type} AS tags
-      JOIN (SELECT COUNT(*) AS count,tag FROM ${type} GROUP BY tag) AS counts ON counts.tag = tags.tag
-      WHERE id = ${this.e(this.id)};`);
+      SELECT 
+        tags.id,
+        tags.tag,
+        tags.reading,
+        counts.count
+      FROM 
+        ${type} AS tags
+      JOIN (
+        SELECT 
+          COUNT(*) AS count,
+          tag
+        FROM 
+        ${type}
+        WHERE 
+          tag IN (SELECT tag FROM ${type} WHERE id = ${this.e(this.id)})
+        GROUP BY tag
+      ) AS counts 
+      ON 
+        counts.tag = tags.tag
+      WHERE 
+        tags.id = ${this.e(this.id)};
+    `);
   }
 
   async getTags() {
