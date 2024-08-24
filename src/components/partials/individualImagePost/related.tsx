@@ -2,9 +2,11 @@ import { Skeleton, Image, Card, Box, Heading } from "@chakra-ui/react";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "@/_frontend/fetch";
-import { SearchImageResult } from "@/types/api/search/images";
+import { ImageResultSet, SearchImageResult } from "@/types/api/search/images";
 import Link from "next/link";
 import Slider from "react-slick";
+import { FC } from "react";
+import { ImageListResultSet } from "@/types/api/image";
 
 export default function RelatedImages() {
   const router = useRouter();
@@ -18,13 +20,29 @@ export default function RelatedImages() {
     return null;
   }
   return (
+    <ImagesSlider
+      title="Related Images"
+      data={data?.body}
+      isLoading={isLoading}
+    />
+  );
+}
+
+export const ImagesSlider: FC<{
+  isSameFunc?: (id: number) => void;
+  title?: any | string;
+  data?: ImageResultSet[] | ImageListResultSet[];
+  isLoading?: boolean;
+}> = ({ title, data, isLoading, isSameFunc }) => {
+  const router = useRouter();
+  return (
     <Box mt="6">
       <Heading size={"md"} m={"4"} color="teal">
-        Related Images
+        {title}
       </Heading>
       <Slider
         slidesToShow={6}
-        slidesToScroll={3}
+        slidesToScroll={6}
         responsive={[
           {
             breakpoint: 768,
@@ -53,7 +71,7 @@ export default function RelatedImages() {
                 </Box>
               );
             })
-          : data.body.map((item) => {
+          : data.map((item) => {
               if (!item.backup_saved_url) return null;
               return (
                 <Box key={item.id}>
@@ -62,7 +80,20 @@ export default function RelatedImages() {
                       margin: "0 20px",
                     }}
                   >
-                    <Link href={`/image/${item.id}`}>
+                    <Link
+                      onClick={(e) => {
+                        if (isSameFunc && item.id === router.query.id) {
+                          isSameFunc(item.increment);
+                          e.preventDefault();
+                          return;
+                        }
+                      }}
+                      href={`/image/${item.id}${
+                        isSameFunc && item.id !== router.query.id
+                          ? `?initialId=${item.increment}`
+                          : ``
+                      }`}
+                    >
                       <Card
                         borderRadius={"20px"}
                         as="span"
@@ -92,4 +123,4 @@ export default function RelatedImages() {
       </Slider>
     </Box>
   );
-}
+};

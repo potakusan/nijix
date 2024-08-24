@@ -29,6 +29,20 @@ export class IndividualIllustAPI extends SQLFuncWrapper {
     return rows;
   }
 
+  async getAdditionals() {
+    if (!this.con) return [];
+    if (!this.id) return [];
+    const ambiguous = this.id.replace(/_\d{0,3}$/g, "");
+    const [rows, _fields] = await this.con.execute<ImageResultSet[]>(`
+      SELECT im.*,tw.text,au.username FROM images AS im
+      JOIN tweets tw ON im.id = tw.id
+      JOIN authors au ON au.author_id = tw.author_id
+      WHERE im.id LIKE ${this.e(ambiguous + "%")}
+      ORDER BY increment asc;
+    `);
+    return rows;
+  }
+
   private getTagsWithCounts(type: "tags" | "noun_tags") {
     if (!this.con) return [];
     if (!this.id) return [];

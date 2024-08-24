@@ -1,7 +1,7 @@
 export type IndividualIllustType = {
   error: boolean;
   errorMessage?: string;
-  body: ImageListResultSet[];
+  body: { main: ImageListResultSet[]; additional: ImageListResultSet[] };
 };
 
 export type ImageListResultSet = {
