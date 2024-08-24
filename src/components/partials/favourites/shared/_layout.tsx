@@ -51,6 +51,7 @@ export const MyPageLayout = () => {
     group.push(item.id);
     return group;
   }, []);
+
   const id = router.query.id as string;
   return (
     <>
@@ -145,17 +146,16 @@ const LightBox = (
     `limit=${GLOBAL_INTMAX}`,
     `hparams=${params.get("hparams") || ""}`,
     `offset=0`,
-    `favs=${ids.join(",")}&isSlideshow=true`,
+    `sharedIds=${router.query.id}&isSlideshow=true`,
   ];
 
+  console.log(Slideshow.open, ids.length);
   const {
     data: fData,
     error,
     isLoading,
   } = useSWR<SearchImageResult>(
-    Slideshow.open && ids.length > 0
-      ? `/search/images?${queryGenerator(qt)}`
-      : null,
+    Slideshow.open ? `/search/images?${queryGenerator(qt)}` : null,
     fetcher
   );
 
@@ -176,6 +176,7 @@ const LightBox = (
       group.push({ src: item.backup_saved_url || item.url });
       return group;
     }, []);
+    console.log(fData, fetchedData);
     return (
       <Lightbox
         slideshow={{ delay: 2000 }}

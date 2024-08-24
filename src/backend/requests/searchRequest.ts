@@ -26,6 +26,7 @@ export const SearchRequestFormatter = (queries: {
     text: "",
     favs: null,
     isSlideshow: false,
+    sharedIds: "",
   };
 
   inputs.tags = queries.tags ? queries.tags.split(",") : [];
@@ -74,6 +75,9 @@ export const SearchRequestFormatter = (queries: {
   }
   if (queries.isSlideshow) {
     inputs.isSlideshow = true;
+  }
+  if (queries.sharedIds) {
+    inputs.sharedIds = queries.sharedIds;
   }
 
   return { success: true, inputs: inputs };

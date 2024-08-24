@@ -52,6 +52,9 @@ export default async function handler(
 
   if (inputs.favs) {
     i.setFavs(inputs.favs);
+  } else if (inputs.sharedIds) {
+    const all = await i.getSharedItems(inputs.sharedIds);
+    i.setFavs(all);
   }
 
   if (inputs.sort === "top") {

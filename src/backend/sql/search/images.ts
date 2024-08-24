@@ -194,4 +194,21 @@ export class IllustAPI extends SQLFuncWrapper {
     ${this.joinWhereConditions()}
     ${this.orderBy()}
     LIMIT ${this.num(this.limit)} OFFSET ${this.num(this.offset)};`;
+
+  async getSharedItems(id: string) {
+    if (!this.con) return;
+    const [rows, _fields] = await this.con.execute<any[]>(`
+      SELECT * FROM shares WHERE id = ${this.e(id)}
+      `);
+    if (rows.length > 0) {
+      const ids = JSON.parse(rows[0].ids);
+      return ids.reduce((group: string[], item: any) => {
+        if (!group) group = [];
+        group.push(item.id);
+        return group;
+      }, []);
+    } else {
+      return [];
+    }
+  }
 }

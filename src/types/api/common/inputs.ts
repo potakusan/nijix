@@ -16,6 +16,7 @@ export interface CommonSearchRequestInputs {
   text?: string;
   favs?: string[] | null;
   isSlideshow: boolean;
+  sharedIds?: string;
 }
 
 export interface CommonIndividualImageRequestInputs {
