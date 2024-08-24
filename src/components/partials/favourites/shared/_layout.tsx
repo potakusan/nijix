@@ -149,7 +149,6 @@ const LightBox = (
     `sharedIds=${router.query.id}&isSlideshow=true`,
   ];
 
-  console.log(Slideshow.open, ids.length);
   const {
     data: fData,
     error,
@@ -176,7 +175,6 @@ const LightBox = (
       group.push({ src: item.backup_saved_url || item.url });
       return group;
     }, []);
-    console.log(fData, fetchedData);
     return (
       <Lightbox
         slideshow={{ delay: 2000 }}
