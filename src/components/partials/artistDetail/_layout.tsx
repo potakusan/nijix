@@ -201,7 +201,7 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  に関連する{data.body.source === "twitter" ? "@" : ""}
+                  の{data.body.source === "twitter" ? "@" : ""}
                   {data.body.username}さんのイラスト(
                   {data.body.tweetCount}枚)
                 </>

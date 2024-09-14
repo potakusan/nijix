@@ -40,7 +40,7 @@ export default function SearchByTagAndNouns() {
       window.document.title = `${tags
         .concat(nouns)
 
-        .join(",")}に関連するエロ画像(${router.query.page}ページ) - NijiX`;
+        .join(",")}のエロ画像(${router.query.page}ページ) - NijiX`;
     } else {
       window.document.title = `エロ画像検索(${router.query.page}ページ) - NijiX`;
     }
@@ -63,7 +63,7 @@ export default function SearchByTagAndNouns() {
                   .filter((item) => item !== "_")
                   .join(
                     ","
-                  )}に関連するエロ画像を多数掲載。AIを使った特徴分類で理想のイラストを簡単に見つけられます。`
+                  )}のエロ画像を多数掲載。AIを使った特徴分類で理想のイラストを簡単に見つけられます。`
               : ""
           }
         />
