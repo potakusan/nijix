@@ -104,6 +104,16 @@ export class TagExplorer extends SQLFuncWrapper {
         ? `
       SELECT COUNT(*) AS num, t.tag
       FROM ${this.view === "tags" ? "tags" : "noun_tags"} AS t
+      ${
+        this.view === "character"
+          ? `
+        INNER JOIN 
+          noun_types ntp
+        ON 
+          t.tag = ntp.tag
+        `
+          : ""
+      }
       GROUP BY t.tag
       ORDER BY num DESC
       LIMIT ${Number(this.limit)} OFFSET ${Number(this.offset)}`
@@ -116,6 +126,16 @@ export class TagExplorer extends SQLFuncWrapper {
       SELECT COUNT(*) AS num, t.tag
       FROM filtered_images fi
       JOIN ${this.view === "tags" ? "tags" : "noun_tags"} t ON fi.id = t.id
+      ${
+        this.view === "character"
+          ? `
+        INNER JOIN 
+          noun_types ntp
+        ON 
+          t.tag = ntp.tag
+        `
+          : ""
+      }
       GROUP BY t.tag
       ORDER BY num DESC
       LIMIT ${Number(this.limit)} OFFSET ${Number(this.offset)}

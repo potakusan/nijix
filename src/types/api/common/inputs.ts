@@ -12,7 +12,7 @@ export interface CommonSearchRequestInputs {
   hParams: HParams[] | null;
   sort: string;
   seed: string;
-  view: "tags" | "nouns";
+  view: "tags" | "nouns" | "character";
   text?: string;
   favs?: string[] | null;
   isSlideshow: boolean;

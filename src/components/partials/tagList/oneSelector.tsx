@@ -24,6 +24,13 @@ export const ConditionsSelector: FC<{
         />
         <Divider my={"4"} />
         <TagExplorer
+          _character
+          artist={artist}
+          sharedId={sharedId}
+          favourite={favourite}
+        />
+        <Divider my={"4"} />
+        <TagExplorer
           _noun
           artist={artist}
           sharedId={sharedId}

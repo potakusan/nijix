@@ -38,7 +38,12 @@ export const SearchRequestFormatter = (queries: {
   inputs.offset = Number(queries.offset || "0") || 0;
   inputs.authorId = queries.authorId || null;
   inputs.aiMode = Number(queries.aiMode);
-  inputs.view = String(queries.view) === "nouns" ? "nouns" : "tags";
+  inputs.view =
+    String(queries.view) === "nouns"
+      ? "nouns"
+      : String(queries.view) === "character"
+      ? "character"
+      : "tags";
 
   if (
     queries.sinceDate &&

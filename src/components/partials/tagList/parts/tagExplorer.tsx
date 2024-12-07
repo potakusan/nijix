@@ -31,10 +31,11 @@ import { queryGenerator } from "@/_frontend/queryGenerator";
 export const TagExplorer: FC<{
   _tag?: boolean;
   _noun?: boolean;
+  _character?: boolean;
   artist?: string;
   favourite?: string[];
   sharedId?: string;
-}> = ({ _tag, _noun, artist, favourite, sharedId }) => {
+}> = ({ _tag, _noun, _character, artist, favourite, sharedId }) => {
   const router = useRouter();
   const params = useSearchParams();
   const { tag, noun } = router.query;
@@ -47,7 +48,9 @@ export const TagExplorer: FC<{
       `hparams=${params.get("hparams") || ""}`,
       `limit=${GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
       `offset=${pageIndex * GLOBAL_TAGS_NUMBERS_PER_PAGE}`,
-      `view=${_tag ? "tags" : _noun ? "nouns" : "tags"}`,
+      `view=${
+        _character ? "character" : _tag ? "tags" : _noun ? "nouns" : "tags"
+      }`,
     ];
     if (artist) qs.push(`authorId=${artist}`);
     if (favourite) qs.push(`favs=${favourite.join(",")}`);
@@ -74,7 +77,7 @@ export const TagExplorer: FC<{
       (tag as string) || "_",
       (noun as string) || "_",
       _tag ? newTag : null,
-      _noun ? newTag : null,
+      _noun || _character ? newTag : null,
       artist,
       !!favourite,
       sharedId
@@ -86,6 +89,9 @@ export const TagExplorer: FC<{
     if (_noun) {
       return noun ? (noun as string).split(",").indexOf(current) > -1 : false;
     }
+    if (_character) {
+      return noun ? (noun as string).split(",").indexOf(current) > -1 : false;
+    }
     return false;
   };
 
@@ -95,16 +101,21 @@ export const TagExplorer: FC<{
         <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
           {_tag && `タグ`}
           {_noun && `特徴`}
+          {_character && `キャラクター`}
         </Heading>
         <Text>Fetch Error</Text>
       </>
     );
-  if (!data) return <SkeletonTagCloud _tag={_tag} _noun={_noun} />;
+  if (!data)
+    return (
+      <SkeletonTagCloud _character={_character} _tag={_tag} _noun={_noun} />
+    );
   return (
     <>
       <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
         {_tag && `タグ`}
         {_noun && `特徴`}
+        {_character && `キャラクター`}
       </Heading>
       <HStack spacing={1} wrap={"wrap"}>
         {data
@@ -163,8 +174,9 @@ export const TagExplorer: FC<{
 export const SkeletonTagCloud: FC<{
   _tag?: boolean;
   _noun?: boolean;
+  _character?: boolean;
   withHeader?: boolean;
-}> = ({ _tag, _noun, withHeader = true }) => {
+}> = ({ _tag, _noun, _character, withHeader = true }) => {
   const rand = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -174,6 +186,7 @@ export const SkeletonTagCloud: FC<{
         <Heading size="sm" as="p" sx={{ marginBottom: "8px" }}>
           {_tag && "タグ"}
           {_noun && "特徴"}
+          {_character && `キャラクター`}
         </Heading>
       )}
       <HStack spacing={1} wrap={"wrap"}>

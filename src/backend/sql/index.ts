@@ -126,9 +126,9 @@ export default class SQLFuncWrapper extends SQLFunc {
 
   setAuthorId = (authorId: string | null) => (this.authorId = authorId);
 
-  protected view: "tags" | "nouns" = "tags";
+  protected view: "tags" | "nouns" | "character" = "tags";
 
-  setView = (input: "tags" | "nouns") => (this.view = input);
+  setView = (input: "tags" | "nouns" | "character") => (this.view = input);
 
   protected sinceDate: null | string = null;
   protected untilDate: null | string = null;
