@@ -79,7 +79,7 @@ export const ImageCard: FC<ImageResultSet> = (props) => {
 
   const [unavailable, setUnavailable] = useState<boolean>(false);
   const [showAll, setShowAll] = useState<boolean>(withoutURL.length < maxLen);
-  const href = unavailable ? "#" : `/image/${props.id}`;
+  const href = unavailable ? "#" : `/image/${encodeURIComponent(props.id)}`;
   const originalURL = generateOriginalUrl(props);
   return (
     <Card sx={{ width: "100%", maxWidth: "400px" }}>
