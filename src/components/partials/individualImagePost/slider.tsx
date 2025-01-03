@@ -73,7 +73,7 @@ const Carousel: FC<{ setError: (input: boolean) => void }> = ({ setError }) => {
     initial: 0,
   });
   const { data, error, isLoading } = useSWR<IndividualIllustType>(
-    id ? `/image/list?id=${id}` : null,
+    id ? `/image/list?id=${encodeURIComponent(id as string)}` : null,
     fetcher
   );
 

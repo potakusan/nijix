@@ -12,7 +12,7 @@ export default function RelatedImages() {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<SearchImageResult>(
-    id ? `/image/related?id=${id}` : null,
+    id ? `/image/related?id=${encodeURIComponent(id as string)}` : null,
     fetcher
   );
   if (error) return <>Error</>;
