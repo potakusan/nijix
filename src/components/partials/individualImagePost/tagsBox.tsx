@@ -18,7 +18,7 @@ const TagsBox = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<TagsResultType>(
-    id ? `/image/tags?id=${id}` : null,
+    id ? `/image/tags?id=${encodeURIComponent(id as string)}` : null,
     fetcher
   );
   if (!isLoading && (!data || data.body.tags.length === 0)) {

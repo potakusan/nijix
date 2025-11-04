@@ -23,7 +23,7 @@ export default function ArtistBox() {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<ArtistMetaResultType>(
-    id ? `/artist/meta/fromImage?id=${id}` : null,
+    id ? `/artist/meta/fromImage?id=${encodeURIComponent(id as string)}` : null,
     fetcher
   );
 

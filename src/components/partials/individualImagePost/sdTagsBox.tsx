@@ -23,7 +23,7 @@ export default function SDTagsBox() {
   const router = useRouter();
   const { id } = router.query;
   const { data, error, isLoading } = useSWR<SDResponseType>(
-    id ? `/image/sd?id=${id}` : null,
+    id ? `/image/sd?id=${encodeURIComponent(id as string)}` : null,
     fetcher
   );
   if (error) return <>Error</>;
