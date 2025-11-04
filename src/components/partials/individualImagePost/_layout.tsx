@@ -17,6 +17,7 @@ import { useState } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
 import { TopSlider } from "@/pages";
 import { FavBox } from "../favourites/favButton";
+import { AdCard } from "@/components/common/ad";
 
 export const IndividualImagePostLayout = () => {
   const [error, setError] = useState<boolean>(false);
@@ -25,6 +26,7 @@ export const IndividualImagePostLayout = () => {
   }
   return (
     <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+      <AdCard />
       <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
         <GridItem w="100%" colSpan={{ base: 12, sm: 12, md: 8, lg: 9 }}>
           <Carousel setError={setError} />

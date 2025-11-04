@@ -33,6 +33,7 @@ import { getFavsId } from "@/_frontend/genFavsList";
 import { GLOBAL_INTMAX } from "../../../../../_config/config";
 import { useSearchParams } from "next/navigation";
 import { SearchImageResult } from "@/types/api/search/images";
+import { AdCard } from "@/components/common/ad";
 
 export const MyPageLayout = () => {
   const qlen = getFavsId(0, true);
@@ -40,6 +41,7 @@ export const MyPageLayout = () => {
     <>
       <Header />
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+        <AdCard />
         <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
           <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
             <ConditionsSelector favourite={qlen} />

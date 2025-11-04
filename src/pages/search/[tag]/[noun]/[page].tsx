@@ -1,3 +1,4 @@
+import { AdCard } from "@/components/common/ad";
 import { Wrapper } from "@/components/common/wrapper";
 import { PagingWrapper } from "@/components/partials/imageList/pagenation";
 import { NavBarButton } from "@/components/partials/navBar";
@@ -126,6 +127,7 @@ export default function SearchByTagAndNouns() {
         </Heading>
       </PageHead>
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+        <AdCard />
         <Grid templateColumns={"repeat(12, 1fr)"} gap={4}>
           <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
             <ConditionsSelector />

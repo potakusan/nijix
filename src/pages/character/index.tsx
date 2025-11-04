@@ -21,12 +21,14 @@ import { CharacterTypeResult } from "@/types/api/character";
 import RLink from "next/link";
 import { Fragment } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { AdCard } from "@/components/common/ad";
 
 export default function IndividualImagePage() {
   return (
     <Wrapper>
       <Header />
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+        <AdCard />
         <Container maxW={"4xl"}>
           <Text fontSize="sm" my={4}>
             キャラクター名はMeCabで判定しています。該当するキャラクターがリストにない場合はここから前方一致検索できます。

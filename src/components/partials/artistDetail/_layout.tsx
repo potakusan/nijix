@@ -24,6 +24,7 @@ import { NavBarButton } from "../navBar";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Head from "next/head";
+import { AdCard } from "@/components/common/ad";
 
 export const IndividualArtistLayout = () => {
   const router = useRouter();
@@ -36,6 +37,7 @@ export const IndividualArtistLayout = () => {
     <>
       <Header />
       <Container maxW={"8xl"} my={{ base: 0, md: 8 }}>
+        <AdCard />
         <Grid templateColumns={"repeat(12, minmax(0, 1fr))"} gap={4}>
           <GridItem colSpan={{ base: 12, sm: 12, md: 3, lg: 2 }}>
             <ConditionsSelector artist={id as string} />
